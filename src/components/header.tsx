@@ -1,8 +1,8 @@
 import React from "react";
 
 export interface HeaderProps {
-  type: string;
-  title: string;
+  type?: string;
+  title?: string;
 }
 
 const Header = (props: HeaderProps) => {

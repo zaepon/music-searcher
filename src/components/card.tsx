@@ -1,15 +1,18 @@
 import React from "react";
 import styled from "styled-components";
 import MatchBar from "./matchBar";
+import Header from "./header";
 
 const CardContainer = styled.div`
   margin-top: 1em;
   width: 250px;
+  min-width: 200px;
   min-height: 250px;
   text-align: center;
   border: 2px solid #d7d6d6;
+  border-radius: 5px;
   cursor: pointer;
-  color: #d8e2dc;
+  color: #564787;
   margin-right: 2em;
 
   -webkit-touch-callout: none;
@@ -20,15 +23,21 @@ const CardContainer = styled.div`
   user-select: none;
 `;
 
+const StyledHeader = styled(Header)`
+  color: #d8e2dc;
+`
+
 const StyledImg = styled.img`
   width: 100%;
+  min-height: 231px;
 `;
 
 export interface CardProps {
-  onClick: () => void;
-  title: string;
-  text: string;
-  img: string;
+  onClick?: () => void;
+  title?: string;
+  text?: string;
+  img?: string;
+  fillrate?: number;
 }
 
 const Card = (props: CardProps) => {
@@ -36,9 +45,9 @@ const Card = (props: CardProps) => {
     <>
       <CardContainer onClick={props.onClick}>
         <StyledImg src={props.img} />
-        <h2>{props.title}</h2>
+        <StyledHeader title={props.title} type={'h2'}/>
         <p>{props.text}</p>
-        <MatchBar fillRate={20} />
+        <MatchBar fillRate={props.fillrate}/>
       </CardContainer>
     </>
   );

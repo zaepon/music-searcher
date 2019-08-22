@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 export interface MatchBarProps {
-  fillRate: number;
+  fillRate?: number;
 }
 
 const BarContainer = styled.div`
