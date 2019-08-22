@@ -1,7 +1,17 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import MatchBar from "./matchBar";
 import Header from "./header";
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+`;
 
 const CardContainer = styled.div`
   margin-top: 1em;
@@ -14,6 +24,7 @@ const CardContainer = styled.div`
   cursor: pointer;
   color: #564787;
   margin-right: 2em;
+  animation: ${fadeIn} 2s linear;
 
   -webkit-touch-callout: none;
   -webkit-user-select: none;
