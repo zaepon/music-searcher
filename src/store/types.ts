@@ -13,6 +13,7 @@ export interface LoadingState {
 export interface ApplicationState {
   loading: LoadingState;
   artists: similarArtists[];
+  type: string;
 }
 
 export interface LoadArtistsRequest extends Action {
@@ -28,7 +29,13 @@ export interface LoadArtistsError extends Action {
   type: "loadArtistsError";
 }
 
+export interface SearchArtistSuccess extends Action {
+  type: "searchArtistSuccess";
+  searchResult: {items: []};
+}
+
 export type ApplicationAction =
   | LoadArtistsRequest
   | LoadArtistsSuccess
-  | LoadArtistsError;
+  | LoadArtistsError
+  | SearchArtistSuccess;

@@ -5,7 +5,8 @@ export const initialState: ApplicationState = {
   loading: {
     similarArtists: false
   },
-  artists: []
+  artists: [],
+  type: 'searchArtistSuccess',
 };
 
 
@@ -20,7 +21,15 @@ const reducer = (state = initialState, action: ApplicationAction) => {
       return produce(state, draft => {
         draft.loading.similarArtists = false;
         draft.artists = action.artists;
+        draft.type = 'loadSimilarArtists'
       });
+    
+    case 'searchArtistSuccess':
+      return produce(state, draft => {
+        draft.loading.similarArtists = false;
+        draft.artists = action.searchResult.items;
+        draft.type = 'searchArtistSuccess'
+      })
 
     case 'loadArtistsError':
       return produce(state, draft => {
