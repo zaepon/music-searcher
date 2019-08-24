@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
 import MatchBar from "./matchBar";
 import Header from "./header";
@@ -25,6 +25,7 @@ const CardContainer = styled.div`
   color: #564787;
   margin-right: 2em;
   animation: ${fadeIn} 2s linear;
+  position: relative;
 
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -36,11 +37,52 @@ const CardContainer = styled.div`
 
 const StyledHeader = styled(Header)`
   color: #d8e2dc;
-`
+`;
 
 const StyledImg = styled.img`
   width: 100%;
   min-height: 231px;
+`;
+
+const Menu = styled.div`
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  right: 0;
+  animation: ${fadeIn} 0.25s linear;
+`;
+
+const MenuButton = styled.button`
+  padding: 1em;
+  background-color: #564787;
+  border: 2px solid #564787;
+  cursor: pointer;
+  color: white;
+  font-weight: 700;
+
+  &:last-child {
+    border-bottom-left-radius: 20px;
+  }
+  &:hover {
+    background-color: #fff;
+    color: #564787;
+    border: 1px solid #564787;
+    transition: 0.5s;
+  }
+  &:active {
+    background-color: #564787;
+    border: 1px solid #564787;
+    color: #fff;
+  }
+  &:focus {
+    outline: none;
+  }
+  -moz-user-select: -moz-none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -o-user-select: none;
+  user-select: none;
 `;
 
 export interface CardProps {
@@ -49,16 +91,35 @@ export interface CardProps {
   text?: string;
   img?: string;
   fillrate?: number;
+  menuItems?: MenuItem[];
+}
+
+interface MenuItem {
+  action: () => void;
+  label: string;
 }
 
 const Card = (props: CardProps) => {
+  const [showMenu, toggleShowMenu] = useState(false);
+
   return (
     <>
-      <CardContainer onClick={props.onClick}>
+      <CardContainer onClick={() => toggleShowMenu(showMenu ? false : true)}>
         <StyledImg src={props.img} />
-        <StyledHeader title={props.title} type={'h2'}/>
+        <StyledHeader title={props.title} type={"h2"} />
         <p>{props.text}</p>
-        <MatchBar fillRate={props.fillrate}/>
+        <MatchBar fillRate={props.fillrate} />
+        {showMenu && props.menuItems && (
+          <Menu>
+            {props.menuItems.map(menuItem => {
+              return (
+                <MenuButton onClick={menuItem.action}>
+                  {menuItem.label}
+                </MenuButton>
+              );
+            })}
+          </Menu>
+        )}
       </CardContainer>
     </>
   );

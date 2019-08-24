@@ -7,8 +7,9 @@ import Card from "../components/card";
 import TextInput from "../components/textInput";
 import Button from "../components/button";
 import Loader from "../components/loader";
+import TemplateImage from "../test.png";
 
-import { loadSimilarArtists } from "../store/effects";
+import { loadSimilarArtists, searchArtist } from "../store/effects";
 
 const TopContainer = styled.div`
   text-align: center;
@@ -27,12 +28,14 @@ const TitleContainer = styled.div`
   margin-top: 10%;
   text-align: center;
   width: 100%;
-`
+`;
 
 interface AppProps {
-  getSimilarArtists: (name: string) => object;
+  getSimilarArtists: (id: string) => object;
+  getArtist: (name: string) => object;
   loading: boolean;
   artists?: object[];
+  type: string | undefined;
 }
 
 interface ArtistProps {
@@ -40,6 +43,12 @@ interface ArtistProps {
   images?: ImageProps[];
   genres?: string[];
   popularity?: number;
+  external_urls?: ExternalUrls;
+  id?: string;
+}
+
+interface ExternalUrls {
+  spotify: string;
 }
 
 interface ImageProps {
@@ -57,29 +66,47 @@ const App = (props: AppProps) => {
           value={searchString}
           onChange={e => setSearchString(e.target.value)}
         />
-        <Button onClick={() => props.getSimilarArtists(searchString)}>
-          Search
-        </Button>
+        <Button onClick={() => props.getArtist(searchString)}>Search</Button>
       </TopContainer>
       {props.artists && (
-          <TitleContainer>
-            <Header title={"Similar Artists/Bands"} type={"h1"} />
-          </TitleContainer>
-        )}
+        <TitleContainer>
+          <Header
+            title={
+              props.type === "searchArtistSuccess"
+                ? "Found multiple bands with the same name. Select one."
+                : "Similar Artists/Bands"
+            }
+            type={"h1"}
+            color={"#564787"}
+          />
+        </TitleContainer>
+      )}
       <ArtistsContainer>
-        {props.loading && <Loader />} 
+        {props.loading && <Loader />}
         {!props.loading &&
           props.artists &&
-          props.artists.map((artist: ArtistProps) => {
+          props.artists.map((artist: ArtistProps, index: number) => {
             let imageObj = artist.images!.filter(
               (img: ImageProps) => img.width === 640
             );
+            console.log("arts", artist);
             return (
               <Card
+                key={index}
                 title={artist.name}
-                img={imageObj[0].url}
+                img={imageObj[0] ? imageObj[0].url : TemplateImage}
                 text={artist.genres!.join()}
                 fillrate={artist.popularity}
+                menuItems={[
+                  {
+                    label: "View on Spotify",
+                    action: () => console.log(artist.external_urls!.spotify)
+                  },
+                  {
+                    label: "Search similar artists",
+                    action: () => props.getSimilarArtists(artist.id || "")
+                  }
+                ]}
               />
             );
           })}
@@ -93,14 +120,17 @@ interface State {
   loading: {
     similarArtists: boolean;
   };
+  type: string;
 }
 
 const mapStateToProps = (state: State) => {
   if (state) {
+    console.log("state", state);
     let l = state.loading.similarArtists;
     return {
       loading: state.loading.similarArtists,
-      artists: state.artists
+      artists: state.artists,
+      type: state.type
     };
   } else {
     return { loading: false };
@@ -109,5 +139,5 @@ const mapStateToProps = (state: State) => {
 
 export default connect(
   mapStateToProps,
-  { getSimilarArtists: loadSimilarArtists }
+  { getSimilarArtists: loadSimilarArtists, getArtist: searchArtist }
 )(App);

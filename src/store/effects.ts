@@ -21,13 +21,13 @@ export const loadSimilarArtists = (id: string): Effect => async (
 ) => {
   dispatch(loadArtistsRequest());
 
-  let access_token = checkTokenValidity();
+  let access_token = await checkTokenValidity();
 
   const config = {
     headers: { Authorization: "Bearer " + access_token }
   };
   const res = await axios.get(
-    `https://api.spotify.com/v1/artists/0rpKM0MniNkXM1SLSglYUZ/related-artists`,
+    `https://api.spotify.com/v1/artists/${id}/related-artists`,
     config
   );
 
@@ -42,7 +42,7 @@ export const searchArtist = (name: string): Effect => async (
 ) => {
   dispatch(loadArtistsRequest());
 
-  let access_token = checkTokenValidity();
+  let access_token = await checkTokenValidity();
 
   const config = {
     headers: { Authorization: "Bearer " + access_token }
@@ -90,6 +90,6 @@ export const checkTokenValidity = async () => {
 };
 
 export const retrieveToken = async () => {
-  let res = await axios.get("http://localhost:3011");
+  let res = await axios.get(`${process.env.REACT_APP_TOKEN_API_URL}`);
   return res.data;
 };
