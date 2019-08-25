@@ -21,6 +21,6 @@ interface TextInputProps {
 }
 
 
-const TextInput = (props: TextInputProps) => <StyledTextInput value={props.value} onChange={props.onChange}/>;
+const TextInput = (props: TextInputProps) => <StyledTextInput value={props.value} onChange={props.onChange} placeholder={'Search..'}/>;
 
 export default TextInput;

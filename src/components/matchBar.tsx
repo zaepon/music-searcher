@@ -3,6 +3,7 @@ import styled from "styled-components";
 
 export interface MatchBarProps {
   fillRate?: number;
+  className?: string;
 }
 
 const BarContainer = styled.div`
@@ -16,7 +17,7 @@ const FillBar = styled.div`
 `;
 
 const MatchBar = (props: MatchBarProps) => (
-  <BarContainer>
+  <BarContainer className={props.className}>
     <FillBar style={{ width: `${props.fillRate}%` }} />
   </BarContainer>
 );

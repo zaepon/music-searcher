@@ -3,11 +3,11 @@ import styled from 'styled-components';
 const Button = styled.button`
   width: 100px;
   height: 35px;
-  background-color: #564787;
-  border: 2px solid #564787;
+  background-color: ${props => props.disabled ? 'grey' : '#564787'};
+  border: ${props => props.disabled ? '0px' : '2px solid #564787;'};
   border-radius: 25px;
   cursor: pointer;
-  color: white;
+  color: ${props => props.disabled ? '#9fa1a2' : 'white'};
   font-weight: 700;
   &:hover {
     background-color: #fff;

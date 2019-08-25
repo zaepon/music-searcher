@@ -22,6 +22,7 @@ const ArtistsContainer = styled.div`
   justify-content: center;
   margin-top: 5%;
   flex-wrap: wrap;
+  margin-bottom: 3em;
 `;
 
 const TitleContainer = styled.div`
@@ -59,6 +60,8 @@ interface ImageProps {
 
 const App = (props: AppProps) => {
   const [searchString, setSearchString] = useState("");
+  const [artistName, setArtistName] = useState("");
+
   return (
     <div className="App">
       <TopContainer>
@@ -66,19 +69,38 @@ const App = (props: AppProps) => {
           value={searchString}
           onChange={e => setSearchString(e.target.value)}
         />
-        <Button onClick={() => props.getArtist(searchString)}>Search</Button>
+        <Button
+          style={{ marginLeft: "1em" }}
+          disabled={searchString.length < 1}
+          onClick={() => {
+            setArtistName(searchString);
+            props.getArtist(searchString);
+          }}
+        >
+          Search
+        </Button>
       </TopContainer>
       {props.artists && (
         <TitleContainer>
-          <Header
-            title={
-              props.type === "searchArtistSuccess"
-                ? "Found multiple bands with the same name. Select one."
-                : "Similar Artists/Bands"
-            }
-            type={"h1"}
-            color={"#564787"}
-          />
+          {props.type === "searchArtistSuccess" &&
+            props.artists.length === 0 && (
+              <Header
+                title={`found 0 artists or bands with name "${artistName}"`}
+                type={"h1"}
+                color={"#CAE5FF"}
+              />
+            )}
+          {props.artists.length > 0 && (
+            <Header
+              title={
+                props.type === "searchArtistSuccess"
+                  ? `Found multiple bands with name "${artistName}". Select one.`
+                  : `Displaying Similar Artists/Bands to "${artistName}".`
+              }
+              type={"h1"}
+              color={"#CAE5FF"}
+            />
+          )}
         </TitleContainer>
       )}
       <ArtistsContainer>
@@ -89,10 +111,9 @@ const App = (props: AppProps) => {
             let imageObj = artist.images!.filter(
               (img: ImageProps) => img.width === 640
             );
-            console.log("arts", artist);
             return (
               <Card
-                key={index}
+                key={artist.id}
                 title={artist.name}
                 img={imageObj[0] ? imageObj[0].url : TemplateImage}
                 text={artist.genres!.join()}
@@ -100,11 +121,17 @@ const App = (props: AppProps) => {
                 menuItems={[
                   {
                     label: "View on Spotify",
-                    action: () => console.log(artist.external_urls!.spotify)
+                    action: () =>
+                      window.open(artist.external_urls!.spotify, "_newtab")
                   },
                   {
                     label: "Search similar artists",
-                    action: () => props.getSimilarArtists(artist.id || "")
+                    action: () => {
+                      setArtistName(artist.name || "");
+                      setSearchString(artist.name || "");
+                      props.getSimilarArtists(artist.id || "");
+                      window.scrollTo({ top: 0, behavior: "smooth" });
+                    }
                   }
                 ]}
               />
@@ -123,10 +150,16 @@ interface State {
   type: string;
 }
 
+interface OwnProps {
+  artist: object;
+}
+
 const mapStateToProps = (state: State) => {
   if (state) {
-    console.log("state", state);
-    let l = state.loading.similarArtists;
+    if (state.artists) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
     return {
       loading: state.loading.similarArtists,
       artists: state.artists,

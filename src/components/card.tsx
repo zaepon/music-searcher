@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
-import MatchBar from "./matchBar";
 import Header from "./header";
 
 const fadeIn = keyframes`
@@ -14,15 +13,16 @@ const fadeIn = keyframes`
 `;
 
 const CardContainer = styled.div`
+  background-color: #445b6f;
   margin-top: 1em;
   width: 250px;
   min-width: 200px;
   min-height: 250px;
   text-align: center;
-  border: 2px solid #d7d6d6;
+  border: 2px solid #090f17;
   border-radius: 5px;
   cursor: pointer;
-  color: #564787;
+  color: #cae5ff;
   margin-right: 2em;
   animation: ${fadeIn} 2s linear;
   position: relative;
@@ -42,6 +42,14 @@ const StyledHeader = styled(Header)`
 const StyledImg = styled.img`
   width: 100%;
   min-height: 231px;
+
+  &:hover {
+    opacity: 0.75;
+  }
+`;
+
+const Description = styled.p`
+  margin: 1em;
 `;
 
 const Menu = styled.div`
@@ -107,13 +115,12 @@ const Card = (props: CardProps) => {
       <CardContainer onClick={() => toggleShowMenu(showMenu ? false : true)}>
         <StyledImg src={props.img} />
         <StyledHeader title={props.title} type={"h2"} />
-        <p>{props.text}</p>
-        <MatchBar fillRate={props.fillrate} />
+        <Description>{props.text}</Description>
         {showMenu && props.menuItems && (
           <Menu>
-            {props.menuItems.map(menuItem => {
+            {props.menuItems.map((menuItem, index) => {
               return (
-                <MenuButton onClick={menuItem.action}>
+                <MenuButton key={index} onClick={menuItem.action}>
                   {menuItem.label}
                 </MenuButton>
               );
