@@ -61,7 +61,6 @@ interface ImageProps {
 const App = (props: AppProps) => {
   const [searchString, setSearchString] = useState("");
   const [artistName, setArtistName] = useState("");
-
   return (
     <div className="App">
       <TopContainer>
@@ -90,11 +89,19 @@ const App = (props: AppProps) => {
                 color={"#CAE5FF"}
               />
             )}
+          {props.type === "loadSimilarArtists" &&
+            props.artists.length === 0 && (
+              <Header
+                title={`Found 0 similar artists to "${artistName}"`}
+                type={"h1"}
+                color={"#CAE5FF"}
+              />
+            )}
           {props.artists.length > 0 && (
             <Header
               title={
                 props.type === "searchArtistSuccess"
-                  ? `Found multiple bands with name "${artistName}". Select one.`
+                  ? `Found one or multiple bands with name "${artistName}". Select one.`
                   : `Displaying Similar Artists/Bands to "${artistName}".`
               }
               type={"h1"}
