@@ -31,6 +31,10 @@ const TitleContainer = styled.div`
   width: 100%;
 `;
 
+const StyledIcon = styled.svg`
+  fill: #e16e6e;
+`;
+
 interface AppProps {
   getSimilarArtists: (id: string) => object;
   getArtist: (name: string) => object;
@@ -61,12 +65,14 @@ interface ImageProps {
 const App = (props: AppProps) => {
   const [searchString, setSearchString] = useState("");
   const [artistName, setArtistName] = useState("");
+  console.log(props.loading);
   return (
     <div className="App">
       <TopContainer>
         <TextInput
           value={searchString}
           onChange={e => setSearchString(e.target.value)}
+          placeholder={"Search for artist or band.."}
         />
         <Button
           style={{ marginLeft: "1em" }}
@@ -82,31 +88,70 @@ const App = (props: AppProps) => {
       {props.artists && (
         <TitleContainer>
           {props.type === "searchArtistSuccess" &&
+            !props.loading &&
             props.artists.length === 0 && (
-              <Header
-                title={`found 0 artists or bands with name "${artistName}"`}
-                type={"h1"}
-                color={"#CAE5FF"}
-              />
+              <>
+                {
+                  <StyledIcon
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M0 0h24v24H0z" fill="none" />
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                  </StyledIcon>
+                }
+                <Header
+                  title={`found 0 artists or bands with name "${artistName}"`}
+                  type={"h1"}
+                  color={"#CAE5FF"}
+                />
+              </>
             )}
           {props.type === "loadSimilarArtists" &&
+            !props.loading &&
             props.artists.length === 0 && (
+              <>
+                <StyledIcon
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="75"
+                  height="75"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                </StyledIcon>
+                <Header
+                  title={`Found 0 similar artists to "${artistName}"`}
+                  type={"h1"}
+                  color={"#CAE5FF"}
+                />
+              </>
+            )}
+          {props.artists.length > 0 && !props.loading && (
+            <>
+              {props.type === "searchArtistSuccess" && (
+                <StyledIcon
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="75"
+                  height="75"
+                  viewBox="0 0 24 24"
+                >
+                  <path d="M0 0h24v24H0z" fill="none" />
+                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
+                </StyledIcon>
+              )}
               <Header
-                title={`Found 0 similar artists to "${artistName}"`}
+                title={
+                  props.type === "searchArtistSuccess"
+                    ? `Found one or multiple bands with name "${artistName}". Select one.`
+                    : `Displaying Similar Artists/Bands to "${artistName}".`
+                }
                 type={"h1"}
                 color={"#CAE5FF"}
               />
-            )}
-          {props.artists.length > 0 && (
-            <Header
-              title={
-                props.type === "searchArtistSuccess"
-                  ? `Found one or multiple bands with name "${artistName}". Select one.`
-                  : `Displaying Similar Artists/Bands to "${artistName}".`
-              }
-              type={"h1"}
-              color={"#CAE5FF"}
-            />
+            </>
           )}
         </TitleContainer>
       )}
