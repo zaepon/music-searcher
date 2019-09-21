@@ -6,11 +6,27 @@ const fadeIn = keyframes`
   from {
     opacity: 0;
   }
-
   to {
     opacity: 1;
   }
 `;
+
+const Menu = styled.div`
+  position: absolute;
+  transition: height .5s ease-in-out;
+  width: 100%;
+  height: 0;
+  top: 0;
+`;
+
+const ButtonContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  height: 0;
+  top: 50%;
+  left: 50%;
+`
 
 const CardContainer = styled.div`
   background-color: #445b6f;
@@ -33,7 +49,17 @@ const CardContainer = styled.div`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+
+  &:hover ${Menu}{
+    height: 100%;
+  }
+  &:hover ${ButtonContainer}{
+    height: 100%;
+  }
 `;
+
+
+
 
 const StyledHeader = styled(Header)`
   color: #d8e2dc;
@@ -42,24 +68,13 @@ const StyledHeader = styled(Header)`
 const StyledImg = styled.img`
   width: 100%;
   min-height: 231px;
-
-  &:hover {
-    opacity: 0.75;
-  }
 `;
 
 const Description = styled.p`
   margin: 1em;
 `;
 
-const Menu = styled.div`
-  display: flex;
-  flex-direction: column;
-  position: absolute;
-  top: 0;
-  right: 0;
-  animation: ${fadeIn} 0.25s linear;
-`;
+
 
 const MenuButton = styled.button`
   padding: 1em;
@@ -71,16 +86,15 @@ const MenuButton = styled.button`
 
   &:last-child {
     border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
   }
   &:hover {
     background-color: #fff;
     color: #564787;
-    border: 1px solid #564787;
     transition: 0.5s;
   }
   &:active {
     background-color: #564787;
-    border: 1px solid #564787;
     color: #fff;
   }
   &:focus {
@@ -92,6 +106,8 @@ const MenuButton = styled.button`
   -o-user-select: none;
   user-select: none;
 `;
+
+
 
 export interface CardProps {
   onClick?: () => void;
@@ -116,15 +132,17 @@ const Card = (props: CardProps) => {
         <StyledImg src={props.img} />
         <StyledHeader title={props.title} type={"h2"} />
         <Description>{props.text}</Description>
-        {showMenu && props.menuItems && (
+        {props.menuItems && (
           <Menu>
-            {props.menuItems.map((menuItem, index) => {
+            <ButtonContainer>
+         {props.menuItems.map((menuItem, index) => {
               return (
                 <MenuButton key={index} onClick={menuItem.action}>
                   {menuItem.label}
                 </MenuButton>
               );
             })}
+            </ButtonContainer>
           </Menu>
         )}
       </CardContainer>

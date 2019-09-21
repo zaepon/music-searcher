@@ -65,7 +65,7 @@ interface ImageProps {
 const App = (props: AppProps) => {
   const [searchString, setSearchString] = useState("");
   const [artistName, setArtistName] = useState("");
-  console.log(props.loading);
+  console.log(props);
   return (
     <div className="App">
       <TopContainer>
