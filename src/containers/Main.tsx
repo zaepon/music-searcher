@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { connect } from "react-redux";
 import styled from "styled-components";
+import { History, LocationState } from "history";
 
 import Header from "../components/header";
 import Card from "../components/card";
@@ -9,7 +9,10 @@ import Button from "../components/button";
 import Loader from "../components/loader";
 import TemplateImage from "../test.png";
 
-import { loadSimilarArtists, searchArtist } from "../store/effects";
+import {
+  searchArtist,
+  getSimilarArtists
+} from "../api/apUtils";
 
 const TopContainer = styled.div`
   text-align: center;
@@ -41,6 +44,7 @@ interface AppProps {
   loading: boolean;
   artists?: object[];
   type: string | undefined;
+  history: History<LocationState>;
 }
 
 interface ArtistProps {
@@ -65,101 +69,99 @@ interface ImageProps {
 const App = (props: AppProps) => {
   const [searchString, setSearchString] = useState("");
   const [artistName, setArtistName] = useState("");
+  const [searchResult, setSearchResult] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState("");
   console.log(props);
+
+  const getArtistByName = async (name: string) => {
+    setArtistName(name);
+    setLoading(true)
+    const searchResult = await searchArtist(name);
+    const state = setStatusMessage(searchResult.items, name, 'initial');
+    setStatus(state);
+    setSearchResult(searchResult.items);
+    setLoading(false);
+  };
+
+  const findSimilarArtists = async (artist: ArtistProps) => {
+    const n = artist.name || '';
+    setLoading(true);
+    setArtistName(n);
+    setSearchString(n);
+    const searchResult = await getSimilarArtists(artist.id || '');
+    console.log('Searchresult', searchResult)
+    const state = setStatusMessage(searchResult, n, 'similar');
+    setStatus(state);
+    setSearchResult(searchResult);
+    setLoading(false);
+  }
+
+  const setStatusMessage = (results: object[], name: string, type: string) => {
+
+    switch(type){
+      case 'initial':
+        if (results.length === 0)
+          return `found 0 artists or bands with name "${name}`;
+        if (results.length > 0)
+          return `Found one or multiple bands with name "${name}". Select one.`;
+        return '';
+      
+      case 'similar': 
+        if(results.length === 0)
+          return `No similar bands or artists to "${name}"`
+        if(results.length > 0) 
+          return `Displaying similar artists & bands to "${name}"`
+        return '';
+      default: 
+        return '';
+    }
+  };
+
   return (
-    <div className="App">
-      <TopContainer>
-        <TextInput
-          value={searchString}
-          onChange={e => setSearchString(e.target.value)}
-          placeholder={"Search for artist or band.."}
-        />
-        <Button
-          style={{ marginLeft: "1em" }}
-          disabled={searchString.length < 1}
-          onClick={() => {
-            setArtistName(searchString);
-            props.getArtist(searchString);
-          }}
-        >
-          Search
-        </Button>
-      </TopContainer>
-      {props.artists && (
-        <TitleContainer>
-          {props.type === "searchArtistSuccess" &&
-            !props.loading &&
-            props.artists.length === 0 && (
-              <>
-                {
-                  <StyledIcon
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M0 0h24v24H0z" fill="none" />
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                  </StyledIcon>
-                }
-                <Header
-                  title={`found 0 artists or bands with name "${artistName}"`}
-                  type={"h1"}
-                  color={"#CAE5FF"}
-                />
-              </>
-            )}
-          {props.type === "loadSimilarArtists" &&
-            !props.loading &&
-            props.artists.length === 0 && (
-              <>
-                <StyledIcon
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="75"
-                  height="75"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M0 0h24v24H0z" fill="none" />
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                </StyledIcon>
-                <Header
-                  title={`Found 0 similar artists to "${artistName}"`}
-                  type={"h1"}
-                  color={"#CAE5FF"}
-                />
-              </>
-            )}
-          {props.artists.length > 0 && !props.loading && (
+    <>
+      <div className="App">
+        <TopContainer>
+          <TextInput
+            value={searchString}
+            onChange={e => setSearchString(e.target.value)}
+            placeholder={"Search for artist or band.."}
+          />
+          <Button
+            style={{ marginLeft: "1em" }}
+            disabled={searchString.length < 1}
+            onClick={() => getArtistByName(searchString)}
+          >
+            Search
+          </Button>
+        </TopContainer>
+
+        {!loading && artistName && (
+          <TitleContainer>
             <>
-              {props.type === "searchArtistSuccess" && (
+              {
                 <StyledIcon
                   xmlns="http://www.w3.org/2000/svg"
-                  width="75"
-                  height="75"
+                  width="24"
+                  height="24"
                   viewBox="0 0 24 24"
                 >
                   <path d="M0 0h24v24H0z" fill="none" />
                   <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
                 </StyledIcon>
-              )}
+              }
               <Header
-                title={
-                  props.type === "searchArtistSuccess"
-                    ? `Found one or multiple bands with name "${artistName}". Select one.`
-                    : `Displaying Similar Artists/Bands to "${artistName}".`
-                }
+                title={status}
                 type={"h1"}
                 color={"#CAE5FF"}
               />
             </>
-          )}
-        </TitleContainer>
-      )}
-      <ArtistsContainer>
-        {props.loading && <Loader />}
-        {!props.loading &&
-          props.artists &&
-          props.artists.map((artist: ArtistProps, index: number) => {
+          </TitleContainer>
+        )}
+
+        <ArtistsContainer>
+        {loading && <Loader />}
+        {!loading && searchResult.length > 0 && searchResult.map((artist: ArtistProps, index: number) => {
             let imageObj = artist.images!.filter(
               (img: ImageProps) => img.width === 640
             );
@@ -172,16 +174,15 @@ const App = (props: AppProps) => {
                 fillrate={artist.popularity}
                 menuItems={[
                   {
-                    label: "View on Spotify",
-                    action: () =>
-                      window.open(artist.external_urls!.spotify, "_newtab")
+                    label: "More information",
+                    action: () => props.history.push(`/artist/${artist.id}`)
                   },
                   {
                     label: "Search similar artists",
                     action: () => {
                       setArtistName(artist.name || "");
                       setSearchString(artist.name || "");
-                      props.getSimilarArtists(artist.id || "");
+                      findSimilarArtists(artist);
                       window.scrollTo({ top: 0, behavior: "smooth" });
                     }
                   }
@@ -190,39 +191,9 @@ const App = (props: AppProps) => {
             );
           })}
       </ArtistsContainer>
-    </div>
+      </div>
+    </>
   );
 };
 
-interface State {
-  artists: object[];
-  loading: {
-    similarArtists: boolean;
-  };
-  type: string;
-}
-
-interface OwnProps {
-  artist: object;
-}
-
-const mapStateToProps = (state: State) => {
-  if (state) {
-    if (state.artists) {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    return {
-      loading: state.loading.similarArtists,
-      artists: state.artists,
-      type: state.type
-    };
-  } else {
-    return { loading: false };
-  }
-};
-
-export default connect(
-  mapStateToProps,
-  { getSimilarArtists: loadSimilarArtists, getArtist: searchArtist }
-)(App);
+export default App;

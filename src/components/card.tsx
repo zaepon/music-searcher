@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import styled, { keyframes } from "styled-components";
 import Header from "./header";
 
@@ -57,9 +57,6 @@ const CardContainer = styled.div`
     height: 100%;
   }
 `;
-
-
-
 
 const StyledHeader = styled(Header)`
   color: #d8e2dc;
@@ -124,11 +121,10 @@ interface MenuItem {
 }
 
 const Card = (props: CardProps) => {
-  const [showMenu, toggleShowMenu] = useState(false);
 
   return (
     <>
-      <CardContainer onClick={() => toggleShowMenu(showMenu ? false : true)}>
+      <CardContainer>
         <StyledImg src={props.img} />
         <StyledHeader title={props.title} type={"h2"} />
         <Description>{props.text}</Description>
