@@ -2,7 +2,6 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
 import Main from "./containers/Main";
-import Artist from "./containers/Artist";
 
 import { ThemeProvider } from "styled-components";
 import { Theme, GlobalStyle } from "./theme";
@@ -19,8 +18,7 @@ const Root = () => (
     <>
       <Provider store={store}>
       <Router>
-        <Route path='/' exact component={Main} />
-        <Route path='/artist/:id' component={Artist} />        
+        <Route path='/' exact component={Main} />  
       </Router>
       </Provider>
       <GlobalStyle />
