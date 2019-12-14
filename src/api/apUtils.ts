@@ -50,12 +50,13 @@ const checkTokenValidity = async () => {
     );
     if (tokenObj) {
       //check if token is expired (each token is valid for 1 hour).
-      if (dayjs(tokenObj.timestamp).diff(dayjs()) <= 60) {
+      if (dayjs(tokenObj.timestamp).diff(dayjs(dayjs())) <= 60) {
         token = await retrieveToken();
         let localStorageObj = {
           token: token,
-          timestamp: dayjs().toISOString()
+          timestamp: dayjs().hour(3).toISOString()
         };
+        localStorage.removeItem("spotifyAccessToken");
         localStorage.setItem(
           "spotifyAccessToken",
           JSON.stringify(localStorageObj)
