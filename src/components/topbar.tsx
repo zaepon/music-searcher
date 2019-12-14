@@ -2,7 +2,7 @@ import React, {FunctionComponent} from 'react';
 import styled from 'styled-components';
 
 const StyledBar = styled.div`
-  width: 100vw;
+  width: 100%;
   top:0;
   left: 0;
   right: 0;
