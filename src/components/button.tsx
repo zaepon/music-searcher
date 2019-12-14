@@ -5,7 +5,7 @@ const Button = styled.button`
   height: 35px;
   background-color: ${props => props.disabled ? 'grey' : '#564787'};
   border: ${props => props.disabled ? '0px' : '2px solid #564787;'};
-  border-radius: 25px;
+  border-radius: 8px;
   cursor: pointer;
   color: ${props => props.disabled ? '#9fa1a2' : 'white'};
   font-weight: 700;

@@ -13,6 +13,8 @@ const LoaderDiv = styled.div`
   width: 75px;
   height: 75px;
   animation: ${spin} 1s linear infinite;
+  position: absolute;
+  top: 50%;
 `;
 
 const Loader = () => (

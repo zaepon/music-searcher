@@ -4,11 +4,11 @@ import styled from "styled-components";
 const StyledTextInput = styled.input`
   max-width: 500px;
   width: 100%;
-  height: 2em;
+  height: 3rem;
   padding-left: 1em;
   font-size: 1.2em;
   border: 2px solid #564787;
-  border-radius: 25px;
+  border-radius: 8px;
   color: #464b51;
   &:focus {
     outline: none;
