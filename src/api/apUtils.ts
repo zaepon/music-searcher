@@ -29,11 +29,9 @@ export const getSimilarArtists = async (id: string) => {
 
 export const searchArtist = async (name: string) => {
   const access_token = await checkTokenValidity();
-  console.log(access_token);
   const config = {
     headers: { Authorization: "Bearer " + access_token }
   };
-
   const res = await axios.get(
     `https://api.spotify.com/v1/search?q=${name}&type=artist`,
     config
@@ -50,28 +48,39 @@ const checkTokenValidity = async () => {
     );
     if (tokenObj) {
       //check if token is expired (each token is valid for 1 hour).
-      if (dayjs(tokenObj.timestamp).diff(dayjs(dayjs())) <= 60) {
+      if (dayjs(tokenObj.timestamp).isBefore(dayjs())) {
         token = await retrieveToken();
-        let localStorageObj = {
-          token: token,
-          timestamp: dayjs().hour(3).toISOString()
-        };
-        localStorage.removeItem("spotifyAccessToken");
-        localStorage.setItem(
-          "spotifyAccessToken",
-          JSON.stringify(localStorageObj)
-        );
+        if (token) {
+          let localStorageObj = {
+            token: token.access_token,
+            timestamp: dayjs()
+              .second(token.expires_in - 500)
+              .toISOString()
+          };
+          localStorage.removeItem("spotifyAccessToken");
+          localStorage.setItem(
+            "spotifyAccessToken",
+            JSON.stringify(localStorageObj)
+          );
+        }
       } else {
         token = tokenObj.token;
       }
     }
   } else {
     token = await retrieveToken();
-    let localStorageObj = {
-      token: token,
-      timestamp: dayjs().toISOString()
-    };
-    localStorage.setItem("spotifyAccessToken", JSON.stringify(localStorageObj));
+    if (token) {
+      let localStorageObj = {
+        token: token.access_token,
+        timestamp: dayjs()
+          .second(token.expires_in - 500)
+          .toISOString()
+      };
+      localStorage.setItem(
+        "spotifyAccessToken",
+        JSON.stringify(localStorageObj)
+      );
+    }
   }
   return token;
 };
