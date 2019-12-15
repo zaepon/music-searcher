@@ -16,28 +16,33 @@ export const searchArtistById = async (id: string) => {
 export const getSimilarArtists = async (id: string) => {
   const access_token = await checkTokenValidity();
 
-  const config = {
-    headers: { Authorization: "Bearer " + access_token }
-  };
-  const res = await axios.get(
-    `https://api.spotify.com/v1/artists/${id}/related-artists`,
-    config
-  );
-
-  return res.data.artists;
+  if (access_token) {
+    const config = {
+      headers: { Authorization: "Bearer " + access_token }
+    };
+    console.log("config", config);
+    const res = await axios.get(
+      `https://api.spotify.com/v1/artists/${id}/related-artists`,
+      config
+    );
+    if (res.data.artists) return res.data.artists;
+  }
 };
 
 export const searchArtist = async (name: string) => {
   const access_token = await checkTokenValidity();
-  const config = {
-    headers: { Authorization: "Bearer " + access_token }
-  };
-  const res = await axios.get(
-    `https://api.spotify.com/v1/search?q=${name}&type=artist`,
-    config
-  );
-
-  return res.data.artists;
+  console.log("got accesss token", access_token);
+  if (access_token) {
+    const config = {
+      headers: { Authorization: "Bearer " + access_token }
+    };
+    console.log("config", config);
+    const res = await axios.get(
+      `https://api.spotify.com/v1/search?q=${name}&type=artist`,
+      config
+    );
+    if (res.data.artists) return res.data.artists;
+  }
 };
 
 const checkTokenValidity = async () => {
@@ -49,40 +54,36 @@ const checkTokenValidity = async () => {
     if (tokenObj) {
       //check if token is expired (each token is valid for 1 hour).
       if (dayjs(tokenObj.timestamp).isBefore(dayjs())) {
-        token = await retrieveToken();
-        if (token) {
-          let localStorageObj = {
-            token: token.access_token,
-            timestamp: dayjs()
-              .second(token.expires_in - 500)
-              .toISOString()
-          };
-          localStorage.removeItem("spotifyAccessToken");
-          localStorage.setItem(
-            "spotifyAccessToken",
-            JSON.stringify(localStorageObj)
-          );
-        }
+        const t = await retrieveToken();
+        let localStorageObj = {
+          token: t.access_token,
+          timestamp: dayjs()
+            .second(t.expires_in - 500)
+            .toISOString()
+        };
+        localStorage.removeItem("spotifyAccessToken");
+        localStorage.setItem(
+          "spotifyAccessToken",
+          JSON.stringify(localStorageObj)
+        );
       } else {
+        console.log(tokenObj.token);
         token = tokenObj.token;
       }
     }
   } else {
-    token = await retrieveToken();
-    if (token) {
-      let localStorageObj = {
-        token: token.access_token,
-        timestamp: dayjs()
-          .second(token.expires_in - 500)
-          .toISOString()
-      };
-      localStorage.setItem(
-        "spotifyAccessToken",
-        JSON.stringify(localStorageObj)
-      );
-    }
+    const t = await retrieveToken();
+
+    let localStorageObj = {
+      token: t.access_token,
+      timestamp: dayjs()
+        .second(t.expires_in - 500)
+        .toISOString()
+    };
+    localStorage.setItem("spotifyAccessToken", JSON.stringify(localStorageObj));
+    token = t.access_token;
   }
-  return token.access_token;
+  return token;
 };
 
 const retrieveToken = async () => {
