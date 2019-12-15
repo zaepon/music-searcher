@@ -66,6 +66,7 @@ const checkTokenValidity = async () => {
           "spotifyAccessToken",
           JSON.stringify(localStorageObj)
         );
+        token = t.access_token;
       } else {
         console.log(tokenObj.token);
         token = tokenObj.token;
