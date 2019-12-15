@@ -118,12 +118,19 @@ const App = (props: AppProps) => {
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if(e.key === 'Enter'){
+      getArtistByName(searchString);
+    }
+  }
+
   return (
     <>
       <div className="App">
         <Topbar>
           <TopContainer>
             <TextInput
+              onKeyDown={handleKeyDown}
               value={searchString}
               onChange={e => setSearchString(e.target.value)}
               placeholder={"Search for artist or band.."}

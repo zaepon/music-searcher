@@ -19,9 +19,10 @@ interface TextInputProps {
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
+  onKeyDown: (e: React.KeyboardEvent) => void;
 }
 
 
-const TextInput = (props: TextInputProps) => <StyledTextInput value={props.value} onChange={props.onChange} placeholder={props.placeholder}/>;
+const TextInput = (props: TextInputProps) => <StyledTextInput value={props.value} onKeyDown={props.onKeyDown} onChange={props.onChange} placeholder={props.placeholder}/>;
 
 export default TextInput;
