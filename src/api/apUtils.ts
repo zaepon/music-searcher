@@ -31,7 +31,6 @@ export const getSimilarArtists = async (id: string) => {
 
 export const searchArtist = async (name: string) => {
   const access_token = await checkTokenValidity();
-  console.log("got accesss token", access_token);
   if (access_token) {
     const config = {
       headers: { Authorization: "Bearer " + access_token }
@@ -44,6 +43,23 @@ export const searchArtist = async (name: string) => {
     if (res.data.artists) return res.data.artists;
   }
 };
+
+
+const getArtistAlbums = async (id: string) => {
+  const access_token = await checkTokenValidity();
+  if(access_token){
+    const config = {
+      headers: { Authorization: "Bearer " + access_token }
+    };
+    console.log("config", config);
+    const res = await axios.get(
+      `https://api.spotify.com/v1/artists/${id}/albums`,
+      config
+    );
+      if(res.data) return res.data;
+  }
+}
+
 
 const checkTokenValidity = async () => {
   let token;
