@@ -82,7 +82,7 @@ const checkTokenValidity = async () => {
       );
     }
   }
-  return token;
+  return token.access_token;
 };
 
 const retrieveToken = async () => {
