@@ -1,64 +1,42 @@
 import axios from "axios";
 import dayjs from "dayjs";
 
+
+
 export const searchArtistById = async (id: string) => {
-  const access_token = await checkTokenValidity();
-  const config = {
-    headers: { Authorization: "Bearer " + access_token }
-  };
-  const res = await axios.get(
-    `https://api.spotify.com/v1/artists/${id}`,
-    config
-  );
+  const res = await getData(`https://api.spotify.com/v1/artists/${id}`);
   if (res) return res.data;
 };
 
 export const getSimilarArtists = async (id: string) => {
-  const access_token = await checkTokenValidity();
-
-  if (access_token) {
-    const config = {
-      headers: { Authorization: "Bearer " + access_token }
-    };
-    console.log("config", config);
-    const res = await axios.get(
-      `https://api.spotify.com/v1/artists/${id}/related-artists`,
-      config
-    );
-    if (res.data.artists) return res.data.artists;
-  }
+  const res = await getData(`https://api.spotify.com/v1/artists/${id}/related-artists`);
+  if (res) return res.data.artists;
 };
 
 export const searchArtist = async (name: string) => {
-  const access_token = await checkTokenValidity();
-  if (access_token) {
-    const config = {
-      headers: { Authorization: "Bearer " + access_token }
-    };
-    console.log("config", config);
-    const res = await axios.get(
-      `https://api.spotify.com/v1/search?q=${name}&type=artist`,
-      config
-    );
-    if (res.data.artists) return res.data.artists;
-  }
-};
+    const res = await getData(`https://api.spotify.com/v1/search?q=${name}&type=artist`);
+    if (res) return res.data.artists;
+}
 
 
 const getArtistAlbums = async (id: string) => {
-  const access_token = await checkTokenValidity();
-  if(access_token){
-    const config = {
-      headers: { Authorization: "Bearer " + access_token }
-    };
-    console.log("config", config);
-    const res = await axios.get(
-      `https://api.spotify.com/v1/artists/${id}/albums`,
-      config
-    );
-      if(res.data) return res.data;
-  }
+  const res = await getData(`https://api.spotify.com/v1/artists/${id}/albums`);
+  if (res) return res.data;
 }
+
+
+const getData = async  (reqStr: string) =>  {
+    const access_token = await checkTokenValidity();
+    if(access_token){
+      const config = {
+        headers: { Authorization: "Bearer " + access_token }
+      };
+      const res = await axios.get(reqStr,
+        config
+      );
+      return Promise.resolve(res);
+    }
+ }
 
 
 const checkTokenValidity = async () => {
