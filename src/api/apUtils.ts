@@ -54,7 +54,7 @@ const checkTokenValidity = async () => {
           let localStorageObj = {
             token: token.access_token,
             timestamp: dayjs()
-              .second(3500)
+              .second(token.expires_in - 500)
               .toISOString()
           };
           localStorage.removeItem("spotifyAccessToken");
@@ -73,7 +73,7 @@ const checkTokenValidity = async () => {
       let localStorageObj = {
         token: token.access_token,
         timestamp: dayjs()
-          .second(3500)
+          .second(token.expires_in - 500)
           .toISOString()
       };
       localStorage.setItem(
