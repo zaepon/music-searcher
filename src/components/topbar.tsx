@@ -10,13 +10,13 @@ const StyledBar = styled.div`
   background-color:rgba(9, 32, 63, 0.4);
   display: flex;
   padding-bottom: 2em;
-  
+  min-height: 100px;  
 `
 
 const Topbar: FunctionComponent= ({children}) => {
   return(
     <div>
-    <StyledBar>{children} </StyledBar>
+      <StyledBar>{children} </StyledBar>
     </div>
   )
 }

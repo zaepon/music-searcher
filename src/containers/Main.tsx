@@ -123,7 +123,7 @@ const App = (props: AppProps) => {
       getArtistByName(searchString);
     }
   }
-
+  
   return (
     <>
       <div className="App">
