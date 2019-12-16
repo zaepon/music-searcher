@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { History, LocationState } from "history";
 
@@ -10,7 +10,7 @@ import Loader from "../components/loader";
 import TemplateImage from "../test.png";
 import Topbar from "../components/topbar";
 
-import { searchArtist, getSimilarArtists } from "../api/apUtils";
+import { searchArtist, getSimilarArtists, searchLastQuery } from "../api/apUtils";
 
 const TopContainer = styled.div`
   text-align: center;
@@ -24,7 +24,7 @@ const ArtistsContainer = styled.div`
   display: inline-flex;
   width: 100%;
   justify-content: center;
-  margin-top: 5%;
+  margin-top: 10%;
   flex-wrap: wrap;
   margin-bottom: 3em;
 `;
@@ -73,7 +73,16 @@ const App = (props: AppProps) => {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
-  console.log(props);
+
+  useEffect(() => {
+    if(props.history.location.state !== undefined){
+      const fetchData = async () => {
+        const searchResult = await searchLastQuery(props.history.location.state);
+        setSearchResult(searchResult);
+      }
+    fetchData();      
+    }
+  }, [])
 
   const getArtistByName = async (name: string) => {
     setArtistName(name);
@@ -83,6 +92,7 @@ const App = (props: AppProps) => {
     setStatus(state);
     setSearchResult(searchResult.items);
     setLoading(false);
+    setLastQuery(`https://api.spotify.com/v1/search?q=${name}&type=artist`);
   };
 
   const findSimilarArtists = async (artist: ArtistProps) => {
@@ -96,7 +106,12 @@ const App = (props: AppProps) => {
     setStatus(state);
     setSearchResult(searchResult);
     setLoading(false);
+    setLastQuery(`https://api.spotify.com/v1/artists/${artist.id}/related-artists`);
   };
+
+  const setLastQuery = (url: string) => {
+    props.history.replace({state: url})
+  }
 
   const setStatusMessage = (results: object[], name: string, type: string) => {
     switch (type) {
@@ -123,7 +138,7 @@ const App = (props: AppProps) => {
       getArtistByName(searchString);
     }
   }
-  
+
   return (
     <>
       <div className="App">

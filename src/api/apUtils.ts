@@ -18,6 +18,17 @@ export const searchArtist = async (name: string) => {
     if (res) return res.data.artists;
 }
 
+export const searchLastQuery = async (url: string) => {
+  const res = await getData(url);
+  if (res){
+    if(Array.isArray(res.data.artists))
+      return res.data.artists;
+    else{
+      return res.data.artists.items;
+    }
+  }
+}
+
 
 export const getArtistAlbums = async (id: string) => {
   const res = await getData(`https://api.spotify.com/v1/artists/${id}/albums`);
