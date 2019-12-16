@@ -19,7 +19,7 @@ export const searchArtist = async (name: string) => {
 }
 
 
-const getArtistAlbums = async (id: string) => {
+export const getArtistAlbums = async (id: string) => {
   const res = await getData(`https://api.spotify.com/v1/artists/${id}/albums`);
   if (res) return res.data;
 }
