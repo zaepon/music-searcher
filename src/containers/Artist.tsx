@@ -19,9 +19,9 @@ interface AlbumProps {
   album_type: string;
   artists: object[];
   available_markets: [];
-  external_urls: {spotify: string}
-  href: string
-  id: string
+  external_urls: { spotify: string };
+  href: string;
+  id: string;
   images: Image[];
   name: string;
   release_date: string;
@@ -32,12 +32,12 @@ interface AlbumProps {
 }
 
 interface Image {
-  url: string
+  url: string;
 }
 
 const ButtonContainer = styled.div`
   margin-top: 5em;
-`
+`;
 
 const ArtistContainer = styled.div`
   display: flex;
@@ -49,7 +49,6 @@ const ArtistIcon = styled.img`
   width: 100px;
   height: 100px;
   padding-right: 2em;
-  
 `;
 
 const TopContainer = styled.div`
@@ -69,7 +68,7 @@ const AlbumsContainer = styled.div`
 `;
 
 const Artist = (props: ArtistProps) => {
-  console.log('props', props)
+  console.log("props", props);
   const [artist, setArtist] = useState({ name: "", images: [{ url: "" }] });
   const [albums, setAlbums] = useState({ items: [] });
   const [loading, setLoading] = useState(false);
@@ -92,10 +91,18 @@ const Artist = (props: ArtistProps) => {
   return (
     <>
       <TopContainer>
-          <ArtistContainer>
-            <ArtistIcon src={loading ?  TemplateImage : artist.images[2] && artist.images[2].url} />
-            <Header title={loading ? "...." : artist.name} type={"h1"} color={"#CAE5FF"} />
-          </ArtistContainer>  
+        <ArtistContainer>
+          <ArtistIcon
+            src={
+              loading ? TemplateImage : artist.images[2] && artist.images[2].url
+            }
+          />
+          <Header
+            title={loading ? "...." : artist.name}
+            type={"h1"}
+            color={"#CAE5FF"}
+          />
+        </ArtistContainer>
         <Topbar />
       </TopContainer>
       <ButtonContainer>
@@ -106,7 +113,7 @@ const Artist = (props: ArtistProps) => {
         {albums.items.length > 0 &&
           albums.items.map((album: AlbumProps) => (
             <ImageCard key={album.id} img={album.images[1].url} />
-          ))})}
+          ))}
       </AlbumsContainer>
     </>
   );
