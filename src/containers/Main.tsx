@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
 import { History, LocationState } from "history";
 
@@ -9,6 +9,7 @@ import Button from "../components/button";
 import Loader from "../components/loader";
 import TemplateImage from "../test.png";
 import Topbar from "../components/topbar";
+import {QueryContext} from '../index';
 
 import { searchArtist, getSimilarArtists, searchLastQuery } from "../api/apUtils";
 
@@ -73,16 +74,18 @@ const App = (props: AppProps) => {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
-
+  const lastQ = useContext(QueryContext);
+  
+  
   useEffect(() => {
-    if(props.history.location.state !== undefined){
+    if(lastQ.lastQuery !== ''){
       const fetchData = async () => {
-        const searchResult = await searchLastQuery(props.history.location.state);
+        const searchResult = await searchLastQuery(lastQ.lastQuery);
         setSearchResult(searchResult);
       }
     fetchData();      
     }
-  }, [])
+  }, []);
 
   const getArtistByName = async (name: string) => {
     setArtistName(name);
@@ -92,7 +95,7 @@ const App = (props: AppProps) => {
     setStatus(state);
     setSearchResult(searchResult.items);
     setLoading(false);
-    setLastQuery(`https://api.spotify.com/v1/search?q=${name}&type=artist`);
+    lastQ.setQuery(`https://api.spotify.com/v1/search?q=${name}&type=artist`);
   };
 
   const findSimilarArtists = async (artist: ArtistProps) => {
@@ -106,7 +109,7 @@ const App = (props: AppProps) => {
     setStatus(state);
     setSearchResult(searchResult);
     setLoading(false);
-    setLastQuery(`https://api.spotify.com/v1/artists/${artist.id}/related-artists`);
+    lastQ.setQuery(`https://api.spotify.com/v1/artists/${artist.id}/related-artists`);
   };
 
   const setLastQuery = (url: string) => {
@@ -138,7 +141,6 @@ const App = (props: AppProps) => {
       getArtistByName(searchString);
     }
   }
-
   return (
     <>
       <div className="App">
