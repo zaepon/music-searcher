@@ -6,7 +6,8 @@ import Topbar from "../components/topbar";
 import Header from "../components/header";
 import Loader from "../components/loader";
 import ImageCard from "../components/imageCard";
-import Button from "../components/button"
+import Button from "../components/button";
+import TemplateImage from "../test.png";
 
 interface ArtistProps {
   id: string;
@@ -87,17 +88,14 @@ const Artist = (props: ArtistProps) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log(artist.images[2] && artist.images[2].url);
 
   return (
     <>
       <TopContainer>
-        {!loading && (
           <ArtistContainer>
-            <ArtistIcon src={artist.images[2] && artist.images[2].url} />
-            <Header title={artist.name} type={"h1"} color={"#CAE5FF"} />
-          </ArtistContainer>
-        )}
+            <ArtistIcon src={loading ?  TemplateImage : artist.images[2] && artist.images[2].url} />
+            <Header title={loading ? "...." : artist.name} type={"h1"} color={"#CAE5FF"} />
+          </ArtistContainer>  
         <Topbar />
       </TopContainer>
       <ButtonContainer>
