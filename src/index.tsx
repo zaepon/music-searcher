@@ -6,7 +6,7 @@ import Artist from './containers/Artist';
 import { ThemeProvider } from "styled-components";
 import { Theme, GlobalStyle } from "./theme";
 import { Route, Switch, Redirect } from 'react-router-dom';
-import { BrowserRouter as Router, RouteProps, RouteComponentProps } from 'react-router-dom';
+import { HashRouter as Router, RouteProps, RouteComponentProps } from 'react-router-dom';
 
 require("dotenv").config();
 
