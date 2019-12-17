@@ -13,6 +13,27 @@ interface ArtistProps {
   goBack: () => void;
 }
 
+interface AlbumProps {
+  album_group: string;
+  album_type: string;
+  artists: object[];
+  available_markets: [];
+  external_urls: {spotify: string}
+  href: string
+  id: string
+  images: Image[];
+  name: string;
+  release_date: string;
+  release_date_precision: string;
+  total_tracks: string;
+  type: string;
+  uri: string;
+}
+
+interface Image {
+  url: string
+}
+
 const ButtonContainer = styled.div`
   margin-top: 5em;
 `
@@ -85,9 +106,9 @@ const Artist = (props: ArtistProps) => {
       <AlbumsContainer>
         {loading && <Loader />}
         {albums.items.length > 0 &&
-          albums.items.map((album: any) => (
-            <ImageCard img={album.images[1].url} />
-          ))}
+          albums.items.map((album: AlbumProps) => (
+            <ImageCard key={album.id} img={album.images[1].url} />
+          ))})}
       </AlbumsContainer>
     </>
   );
