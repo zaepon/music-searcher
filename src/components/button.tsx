@@ -3,15 +3,15 @@ import styled from 'styled-components';
 const Button = styled.button`
   width: 100px;
   height: 35px;
-  background-color: ${props => props.disabled ? 'grey' : '#564787'};
-  border: ${props => props.disabled ? '0px' : '2px solid #564787;'};
+  background-color: ${props => props.disabled ? 'grey' : '#7286a3'};
+  border: ${props => props.disabled ? '0px' : '2px solid #7286a3'};
   border-radius: 8px;
   cursor: pointer;
   color: ${props => props.disabled ? '#9fa1a2' : 'white'};
   font-weight: 700;
   &:hover {
     background-color: #fff;
-    color: #564787;
+    color: #7286a3;
     border: 1px solid #564787;
     transition: 0.5s;
   }

@@ -14,9 +14,9 @@ const Theme: DefaultTheme = {
 const GlobalStyle = createGlobalStyle`
   body {
     min-height: 100vh;
-    background-image: linear-gradient(0deg, #09203f, #537895
+    background-image: linear-gradient(0deg, #09203f, #3d597f
       95%);
-    font-family: arial;
+    font-family: verdana;
   }
 
 `

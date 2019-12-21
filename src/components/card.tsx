@@ -75,8 +75,8 @@ const Description = styled.p`
 
 const MenuButton = styled.button`
   padding: 1em;
-  background-color: #564787;
-  border: 2px solid #564787;
+  background-color: #3d597f;
+  border: 2px solid #3d597f;
   cursor: pointer;
   color: white;
   font-weight: 700;
@@ -87,7 +87,7 @@ const MenuButton = styled.button`
   }
   &:hover {
     background-color: #fff;
-    color: #564787;
+    color: #3d597f;
     transition: 0.5s;
   }
   &:active {
