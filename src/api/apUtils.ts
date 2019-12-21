@@ -30,8 +30,12 @@ export const searchLastQuery = async (url: string) => {
 }
 
 
-export const getArtistAlbums = async (id: string) => {
-  const res = await getData(`https://api.spotify.com/v1/artists/${id}/albums`);
+export const getArtistAlbums = async (id: string, offset?: number) => {
+  let url = `https://api.spotify.com/v1/artists/${id}/albums`;
+
+  if(offset) url += `?offset=${offset}`;
+
+  const res = await getData(url);
   if (res) return res.data;
 }
 

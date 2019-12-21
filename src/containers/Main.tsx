@@ -202,7 +202,7 @@ const App = (props: AppProps) => {
                       action: () => props.history.push(`/artist/${artist.id}`)
                     },
                     {
-                      label: "Search similar artists",
+                      label: "Search similar music",
                       action: () => {
                         setArtistName(artist.name || "");
                         setSearchString(artist.name || "");

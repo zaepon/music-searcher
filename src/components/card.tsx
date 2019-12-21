@@ -91,7 +91,7 @@ const MenuButton = styled.button`
     transition: 0.5s;
   }
   &:active {
-    background-color: #564787;
+    background-color: #3d597f;
     color: #fff;
   }
   &:focus {

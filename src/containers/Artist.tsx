@@ -40,6 +40,14 @@ const ButtonContainer = styled.div`
   margin-top: 5em;
 `;
 
+const LoadMoreContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2em;
+  margin-bottom: 4.5em;
+`
+
 const ArtistContainer = styled.div`
   display: flex;
   align-items: center;
@@ -77,7 +85,8 @@ const AlbumsContainer = styled.div`
 const Artist = (props: ArtistProps) => {
   console.log("props", props);
   const [artist, setArtist] = useState({ name: "", images: [{ url: "" }] });
-  const [albums, setAlbums] = useState({ items: [] });
+  const [albumsInfo, setAlbumsInfo] = useState({total: 0})
+  const [albums, setAlbums] = useState([]);
   const [selectedAlbumSrc, setSelectedAlbumSrc] = useState("");
   const [loading, setLoading] = useState(false);
   const [playerVisible, setPlayerVisible] = useState(false);
@@ -88,7 +97,8 @@ const Artist = (props: ArtistProps) => {
       const artist = await searchArtistById(props.id);
       setArtist(artist);
       const albums = await getArtistAlbums(props.id);
-      setAlbums(albums);
+      setAlbumsInfo(albums);
+      setAlbums(albums.items);
       setLoading(false);
     };
     fetchData();
@@ -96,12 +106,19 @@ const Artist = (props: ArtistProps) => {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const loadMoreAlbums = async () => {
+    const rAlbums = await getArtistAlbums(props.id, albums.length);
+    let newAlbumArr = albums.concat(rAlbums.items);
+    setAlbums(newAlbumArr);    
+  }
+
 
   const ToggleMusicPlayer = (id: string) => {
     setSelectedAlbumSrc(`https://open.spotify.com/embed/album/${id}`);
     
     setPlayerVisible(true);
   }
+  console.log(albumsInfo);
 
   return (
     <>
@@ -129,11 +146,12 @@ const Artist = (props: ArtistProps) => {
         }
       <AlbumsContainer>
         {loading && <Loader />}
-        {albums.items.length > 0 &&
-          albums.items.map((album: AlbumProps) => (
+        {albums.length > 0 &&
+          albums.map((album: AlbumProps) => (
             <ImageCard key={album.id} img={album.images[1].url} onClick={() => ToggleMusicPlayer(album.id)} />
           ))}
       </AlbumsContainer>
+      {albums.length < albumsInfo.total && <LoadMoreContainer><Button onClick={loadMoreAlbums}>Load more</Button></LoadMoreContainer>}
     </>
   );
 };
