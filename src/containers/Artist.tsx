@@ -7,6 +7,7 @@ import Header from "../components/header";
 import Loader from "../components/loader";
 import ImageCard from "../components/imageCard";
 import Button from "../components/button";
+import Player from "../components/player";
 import TemplateImage from "../test.png";
 
 interface ArtistProps {
@@ -44,6 +45,12 @@ const ArtistContainer = styled.div`
   align-items: center;
   justify-content: center;
 `;
+const PlayerContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5em;s
+`;
 
 const ArtistIcon = styled.img`
   width: 100px;
@@ -71,8 +78,9 @@ const Artist = (props: ArtistProps) => {
   console.log("props", props);
   const [artist, setArtist] = useState({ name: "", images: [{ url: "" }] });
   const [albums, setAlbums] = useState({ items: [] });
+  const [selectedAlbumSrc, setSelectedAlbumSrc] = useState("");
   const [loading, setLoading] = useState(false);
-  console.log("ar", artist);
+  const [playerVisible, setPlayerVisible] = useState(false);
   useEffect(() => {
     const fetchData = async () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -87,6 +95,13 @@ const Artist = (props: ArtistProps) => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+
+  const ToggleMusicPlayer = (id: string) => {
+    setSelectedAlbumSrc(`https://open.spotify.com/embed/album/${id}`);
+    
+    setPlayerVisible(true);
+  }
 
   return (
     <>
@@ -108,11 +123,15 @@ const Artist = (props: ArtistProps) => {
       <ButtonContainer>
         <Button onClick={props.goBack}>Return</Button>
       </ButtonContainer>
+      {playerVisible && <PlayerContainer>
+        <Player src={selectedAlbumSrc} />
+       </PlayerContainer> 
+        }
       <AlbumsContainer>
         {loading && <Loader />}
         {albums.items.length > 0 &&
           albums.items.map((album: AlbumProps) => (
-            <ImageCard key={album.id} img={album.images[1].url} />
+            <ImageCard key={album.id} img={album.images[1].url} onClick={() => ToggleMusicPlayer(album.id)} />
           ))}
       </AlbumsContainer>
     </>

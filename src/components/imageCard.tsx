@@ -37,7 +37,8 @@ const ImgContainer = styled.div`
 `
 
 interface ImageCardProps {
-  img: string
+  img: string;
+  onClick: () => void;
 }
 
 
@@ -45,7 +46,7 @@ const ImageCard = (props: ImageCardProps) => {
   return (
     <ImgContainer>
       <StyledImg src={props.img} />
-      <StyledIcon></StyledIcon>
+      <StyledIcon onClick={props.onClick}></StyledIcon>
     </ImgContainer>
   )
 }
