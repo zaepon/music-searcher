@@ -17,6 +17,7 @@ const GlobalStyle = createGlobalStyle`
     background-image: linear-gradient(0deg, #09203f, #3d597f
       95%);
     font-family: verdana;
+    background-attachment: fixed;
   }
 
 `

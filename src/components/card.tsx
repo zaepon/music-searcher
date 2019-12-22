@@ -34,7 +34,7 @@ const CardContainer = styled.div`
   width: 250px;
   min-width: 200px;
   min-height: 250px;
-  text-align: center;
+  text-align: initial;
   border: 2px solid #090f17;
   border-radius: 5px;
   cursor: pointer;
@@ -60,6 +60,7 @@ const CardContainer = styled.div`
 
 const StyledHeader = styled(Header)`
   color: #d8e2dc;
+  margin: .75em;
 `;
 
 const StyledImg = styled.img`
@@ -69,6 +70,7 @@ const StyledImg = styled.img`
 
 const Description = styled.p`
   margin: 1em;
+  font-size: .85em;
 `;
 
 
@@ -124,7 +126,7 @@ const Card = (props: CardProps) => {
     <>
       <CardContainer>
         <StyledImg src={props.img} />
-        <StyledHeader title={props.title} type={"h2"} />
+        <StyledHeader title={props.title} type={"h3"} />
         <Description>{props.text}</Description>
         {props.menuItems && (
           <Menu>
