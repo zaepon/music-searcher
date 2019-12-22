@@ -83,13 +83,13 @@ const AlbumsContainer = styled.div`
 `;
 
 const Artist = (props: ArtistProps) => {
-  console.log("props", props);
   const [artist, setArtist] = useState({ name: "", images: [{ url: "" }] });
   const [albumsInfo, setAlbumsInfo] = useState({total: 0})
   const [albums, setAlbums] = useState([]);
   const [selectedAlbumSrc, setSelectedAlbumSrc] = useState("");
   const [loading, setLoading] = useState(false);
   const [playerVisible, setPlayerVisible] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -114,11 +114,9 @@ const Artist = (props: ArtistProps) => {
 
 
   const ToggleMusicPlayer = (id: string) => {
-    setSelectedAlbumSrc(`https://open.spotify.com/embed/album/${id}`);
-    
+    setSelectedAlbumSrc(`https://open.spotify.com/embed/album/${id}`);    
     setPlayerVisible(true);
   }
-  console.log(albumsInfo);
 
   return (
     <>

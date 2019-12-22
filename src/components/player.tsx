@@ -12,13 +12,11 @@ const StyledFrame  = styled.iframe`
     }
 `
 
-
 interface PlayerProps {
     src: string;
 }
 
 const Player = (props: PlayerProps) => {
-
     return (
         <>
         <StyledFrame src={props.src}  frameBorder="0" allow={'encrypted-media'}/>

@@ -2,20 +2,19 @@ import axios from "axios";
 import dayjs from "dayjs";
 
 
-
 export const searchArtistById = async (id: string) => {
   const res = await getData(`https://api.spotify.com/v1/artists/${id}`);
-  if (res) return res.data;
+  return res?.data;
 };
 
 export const getSimilarArtists = async (id: string) => {
   const res = await getData(`https://api.spotify.com/v1/artists/${id}/related-artists`);
-  if (res) return res.data.artists;
+  return res?.data.artists;
 };
 
 export const searchArtist = async (name: string) => {
     const res = await getData(`https://api.spotify.com/v1/search?q=${name}&type=artist`);
-    if (res) return res.data.artists;
+    return res?.data.artists;
 }
 
 export const searchLastQuery = async (url: string) => {
@@ -36,7 +35,7 @@ export const getArtistAlbums = async (id: string, offset?: number) => {
   if(offset) url += `?offset=${offset}`;
 
   const res = await getData(url);
-  if (res) return res.data;
+  return res?.data;
 }
 
 
@@ -77,7 +76,6 @@ const checkTokenValidity = async () => {
         );
         token = t.access_token;
       } else {
-        console.log(tokenObj.token);
         token = tokenObj.token;
       }
     }

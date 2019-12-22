@@ -85,7 +85,7 @@ const App = (props: AppProps) => {
       }
     fetchData();      
     }
-  }, []);
+  }, [lastQ.lastQuery]);
 
   const getArtistByName = async (name: string) => {
     setArtistName(name);
@@ -104,17 +104,12 @@ const App = (props: AppProps) => {
     setArtistName(n);
     setSearchString(n);
     const searchResult = await getSimilarArtists(artist.id || "");
-    console.log("Searchresult", searchResult);
     const state = setStatusMessage(searchResult, n, "similar");
     setStatus(state);
     setSearchResult(searchResult);
     setLoading(false);
     lastQ.setQuery(`https://api.spotify.com/v1/artists/${artist.id}/related-artists`);
   };
-
-  const setLastQuery = (url: string) => {
-    props.history.replace({state: url})
-  }
 
   const setStatusMessage = (results: object[], name: string, type: string) => {
     switch (type) {

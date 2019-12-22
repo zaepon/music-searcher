@@ -72,7 +72,6 @@ const Description = styled.p`
 `;
 
 
-
 const MenuButton = styled.button`
   padding: 1em;
   background-color: #3d597f;
@@ -121,7 +120,6 @@ interface MenuItem {
 }
 
 const Card = (props: CardProps) => {
-
   return (
     <>
       <CardContainer>

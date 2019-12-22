@@ -12,8 +12,7 @@ const StyledIcon = styled.div`
   top: 25%;
   left: 25%;
   transition: .5s;
-  cursor: pointer;
-  
+  cursor: pointer;  
 `;
 
 const StyledImg = styled.img`
@@ -29,6 +28,7 @@ const ImgContainer = styled.div`
   &:hover {
     opacity: 0.8;
   }
+  
   &:hover ${StyledIcon} {
     opacity: 1;
     background-image: url(${playButton});
