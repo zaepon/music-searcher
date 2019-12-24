@@ -1,10 +1,10 @@
 import React from "react";
 import styled from "styled-components";
+import { Box, Image } from "rebass"; 
 
 import playButton from './play-button.svg';
 
-const StyledIcon = styled.div`
-  width: 50px;
+const StyledIcon = styled(Box)`
   opacity: 0;
   position: absolute;
   width: 50%;
@@ -15,16 +15,12 @@ const StyledIcon = styled.div`
   cursor: pointer;  
 `;
 
-const StyledImg = styled.img`
-  width: 250px;
+const StyledImg = styled(Image)`
   min-height: 231px;
 `;
 
-const ImgContainer = styled.div`
-  margin-top: 1em;
-  margin-right: 2em;
+const ImgContainer = styled(Box)`
   position: relative;
-
   &:hover {
     opacity: 0.8;
   }
@@ -44,8 +40,8 @@ interface ImageCardProps {
 
 const ImageCard = (props: ImageCardProps) => {
   return (
-    <ImgContainer>
-      <StyledImg src={props.img} />
+    <ImgContainer mt={'1em'} mr={'2em'} >
+      <StyledImg sx={{width:['250px'], borderRadius:10}} src={props.img} />
       <StyledIcon onClick={props.onClick}></StyledIcon>
     </ImgContainer>
   )

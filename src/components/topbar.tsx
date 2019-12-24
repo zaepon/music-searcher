@@ -1,26 +1,23 @@
 import React, {FunctionComponent} from 'react';
 import styled from 'styled-components';
+import { Flex, Box } from 'rebass';
 
 interface topbarProps {
   scrolled?: boolean;
 }
 
-const StyledBar = styled.div`
-  width: 100%;
+const StyledBar = styled(Flex)`
   top:0;
   left: 0;
   right: 0;
   position:fixed;
   z-index: 9999;
-  background-color:rgba(9, 32, 63, 0.5);
-  display: flex;
+  background-color:rgba(9, 32, 63, 0.8);
   padding-bottom: 3.5em;
   padding-bottom: ${(props: topbarProps) => props.scrolled ? '.25em' : '2em'}
   padding-top: ${(props: topbarProps) => props.scrolled ? '0em' : '2em'}
-  transition: .5s;
+  transition: .2s;
   min-height: 50px;
-
-
 
   &:before {
     content: '';
@@ -39,9 +36,9 @@ const StyledBar = styled.div`
 
 const Topbar: FunctionComponent<topbarProps> = ({children, scrolled}) => {
   return(
-    <div>
-      <StyledBar scrolled={scrolled} >{children} </StyledBar>
-    </div>
+    <Box>
+      <StyledBar width={'100%'} scrolled={scrolled}>{children}</StyledBar>
+    </Box>
   )
 }
  

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { Flex, Box, Image } from "rebass"; 
 
 import { searchArtistById, getArtistAlbums } from "../api/apUtils";
 import Topbar from "../components/topbar";
@@ -23,7 +24,7 @@ interface AlbumProps {
   external_urls: { spotify: string };
   href: string;
   id: string;
-  images: Image[];
+  images: ImageInterface[];
   name: string;
   release_date: string;
   release_date_precision: string;
@@ -32,55 +33,15 @@ interface AlbumProps {
   uri: string;
 }
 
-interface Image {
+interface ImageInterface {
   url: string;
 }
 
-const ButtonContainer = styled.div`
-  margin-top: 5em;
-`;
 
-const LoadMoreContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 2em;
-  margin-bottom: 4.5em;
-`
-
-const ArtistContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-const PlayerContainer = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 5em;s
-`;
-
-const ArtistIcon = styled.img`
-  width: 100px;
-  height: 100px;
-  padding-right: 2em;
-`;
-
-const TopContainer = styled.div`
+const TopContainer = styled(Box)`
   text-align: center;
-  margin: auto;
-  padding-top: 1em;
-  width: 100%;
 `;
 
-const AlbumsContainer = styled.div`
-  display: inline-flex;
-  width: 100%;
-  justify-content: center;
-  margin-top: 5%;
-  flex-wrap: wrap;
-  margin-bottom: 3em;
-`;
 
 const Artist = (props: ArtistProps) => {
   const [artist, setArtist] = useState({ name: "", images: [{ url: "" }] });
@@ -89,6 +50,8 @@ const Artist = (props: ArtistProps) => {
   const [selectedAlbumSrc, setSelectedAlbumSrc] = useState("");
   const [loading, setLoading] = useState(false);
   const [playerVisible, setPlayerVisible] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -103,8 +66,15 @@ const Artist = (props: ArtistProps) => {
     };
     fetchData();
 
+    window.addEventListener('scroll', handleScroll, true);
+    return(() => {
+      window.removeEventListener('scroll', handleScroll, true);
+    });
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleScroll = () => window.scrollY > 200 && !scrolled ? setScrolled(true) : setScrolled(false);
 
   const loadMoreAlbums = async () => {
     const rAlbums = await getArtistAlbums(props.id, albums.length);
@@ -121,9 +91,12 @@ const Artist = (props: ArtistProps) => {
 
   return (
     <>
-      <TopContainer>
-        <ArtistContainer>
-          <ArtistIcon
+      <Topbar scrolled={scrolled}>
+      <TopContainer pt={'1em'} width={'100%'} m={'auto'}>
+        <Flex alignItems={'center'} justifyContent={'center'}>
+          <Image
+            width={100}
+            height={100}
             src={
               loading ? TemplateImage : artist.images[2] && artist.images[2].url
             }
@@ -133,24 +106,24 @@ const Artist = (props: ArtistProps) => {
             type={"h1"}
             color={"#CAE5FF"}
           />
-        </ArtistContainer>
-        <Topbar />
+        </Flex>
       </TopContainer>
-      <ButtonContainer>
+      </Topbar>
+      <Box mt={'15em'}>
         <Button onClick={props.goBack}>Return</Button>
-      </ButtonContainer>
-      {playerVisible && <PlayerContainer>
+      </Box>
+      {playerVisible && <Flex alignItems={'center'} justifyContent={'center'} mt={'4.5em'}>
         <Player src={selectedAlbumSrc} />
-       </PlayerContainer> 
+       </Flex> 
         }
-      <AlbumsContainer>
+      <Flex width={'100%'} justifyContent={'center'} mt={'5%'} flexWrap={'wrap'} mb={'3em'}>
         {loading && <Loader />}
         {albums.length > 0 &&
           albums.map((album: AlbumProps) => (
             <ImageCard key={album.id} img={album.images[1].url} onClick={() => ToggleMusicPlayer(album.id)} />
           ))}
-      </AlbumsContainer>
-      {albums.length < albumsInfo.total && <LoadMoreContainer><Button onClick={loadMoreAlbums}>Load more</Button></LoadMoreContainer>}
+      </Flex>
+      {albums.length < albumsInfo.total && <Flex alignItems={'center'} justifyContent={'center'} mt={'2em'} mb={'4.5em'}><Button onClick={loadMoreAlbums}>Load more</Button></Flex>}
     </>
   );
 };

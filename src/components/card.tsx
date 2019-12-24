@@ -1,5 +1,6 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
+import { Box, Flex, Image } from "rebass";
 import Header from "./header";
 
 const fadeIn = keyframes`
@@ -11,35 +12,31 @@ const fadeIn = keyframes`
   }
 `;
 
-const Menu = styled.div`
+const Menu = styled(Box)`
   position: absolute;
-  transition: height .5s ease-in-out;
+  transition: height 0.5s ease-in-out;
   width: 100%;
   height: 0;
   top: 0;
 `;
 
-const ButtonContainer = styled.div`
-  display: flex;
-  flex-direction: column;
+const ButtonContainer = styled(Flex)`
   overflow: hidden;
   height: 0;
   top: 50%;
   left: 50%;
-`
+`;
 
-const CardContainer = styled.div`
+const CardContainer = styled(Box)`
   background-color: #445b6f;
-  margin-top: 1em;
   width: 250px;
   min-width: 200px;
   min-height: 250px;
   text-align: initial;
   border: 2px solid #090f17;
-  border-radius: 5px;
+  border-radius: 10px;
   cursor: pointer;
   color: #cae5ff;
-  margin-right: 2em;
   animation: ${fadeIn} 2s linear;
   position: relative;
 
@@ -50,29 +47,27 @@ const CardContainer = styled.div`
   -ms-user-select: none;
   user-select: none;
 
-  &:hover ${Menu}{
+  &:hover ${Menu} {
     height: 100%;
   }
-  &:hover ${ButtonContainer}{
+  &:hover ${ButtonContainer} {
     height: 100%;
   }
 `;
 
 const StyledHeader = styled(Header)`
   color: #d8e2dc;
-  margin: .75em;
+  margin: 0.75em;
 `;
 
-const StyledImg = styled.img`
-  width: 100%;
+const StyledImg = styled(Image)`
   min-height: 231px;
 `;
 
 const Description = styled.p`
   margin: 1em;
-  font-size: .85em;
+  font-size: 0.85em;
 `;
-
 
 const MenuButton = styled.button`
   padding: 1em;
@@ -105,8 +100,6 @@ const MenuButton = styled.button`
   user-select: none;
 `;
 
-
-
 export interface CardProps {
   onClick?: () => void;
   title?: string;
@@ -114,6 +107,7 @@ export interface CardProps {
   img?: string;
   fillrate?: number;
   menuItems?: MenuItem[];
+  className?: string;
 }
 
 interface MenuItem {
@@ -124,20 +118,20 @@ interface MenuItem {
 const Card = (props: CardProps) => {
   return (
     <>
-      <CardContainer>
-        <StyledImg src={props.img} />
+      <CardContainer className={props.className} mr={"1.5em"} mt={"3em"}>
+        <StyledImg src={props.img} sx={{ width: ["100%"], borderRadius: 5 }} />
         <StyledHeader title={props.title} type={"h3"} />
         <Description>{props.text}</Description>
         {props.menuItems && (
           <Menu>
-            <ButtonContainer>
-         {props.menuItems.map((menuItem, index) => {
-              return (
-                <MenuButton key={index} onClick={menuItem.action}>
-                  {menuItem.label}
-                </MenuButton>
-              );
-            })}
+            <ButtonContainer flexDirection={"column"}>
+              {props.menuItems.map((menuItem, index) => {
+                return (
+                  <MenuButton key={index} onClick={menuItem.action}>
+                    {menuItem.label}
+                  </MenuButton>
+                );
+              })}
             </ButtonContainer>
           </Menu>
         )}

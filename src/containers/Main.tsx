@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
+import { Flex, Box } from "rebass";
 import { History, LocationState } from "history";
 
 import Header from "../components/header";
@@ -13,25 +14,13 @@ import {QueryContext} from '../index';
 
 import { searchArtist, getSimilarArtists, searchLastQuery } from "../api/apUtils";
 
-const TopContainer = styled.div`
+const TopContainer = styled(Box)`
   text-align: center;
   position: relative;
-  width: 100%;
 `;
 
-const ArtistsContainer = styled.div`
-  display: inline-flex;
-  width: 100%;
-  justify-content: center;
-  margin-top: 15%;
-  flex-wrap: wrap;
-  margin-bottom: 3em;
-`;
-
-const TitleContainer = styled.div`
-  margin-top: 25%;
+const TitleContainer = styled(Box)`
   text-align: center;
-  width: 100%;
 `;
 
 const StyledIcon = styled.svg`
@@ -148,9 +137,9 @@ const App = (props: AppProps) => {
   
   return (
     <>
-      <div className="App">
+      <Box className="App">
         <Topbar scrolled={scrolled}>
-          <TopContainer>
+          <TopContainer width={'100%'}>
             <TextInput
               onKeyDown={handleKeyDown}
               value={searchString}
@@ -168,7 +157,7 @@ const App = (props: AppProps) => {
         </Topbar>
 
         {!loading && artistName && (
-          <TitleContainer>
+          <TitleContainer mt={'25%'} width={'100%'}>
             <>
               {
                 <StyledIcon
@@ -186,7 +175,7 @@ const App = (props: AppProps) => {
           </TitleContainer>
         )}
 
-        <ArtistsContainer>
+        <Flex width={'100%'} justifyContent={'center'} mt={'15%'} mb={'3%'} flexWrap={'wrap'}>
           {loading && <Loader />}
           {!loading &&
             searchResult.length > 0 &&
@@ -219,8 +208,8 @@ const App = (props: AppProps) => {
                 />
               );
             })}
-        </ArtistsContainer>
-      </div>
+        </Flex>
+      </Box>
     </>
   );
 };
