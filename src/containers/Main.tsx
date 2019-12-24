@@ -16,8 +16,6 @@ import { searchArtist, getSimilarArtists, searchLastQuery } from "../api/apUtils
 const TopContainer = styled.div`
   text-align: center;
   position: relative;
-  margin: auto;
-  padding-top: 1em;
   width: 100%;
 `;
 
@@ -25,13 +23,13 @@ const ArtistsContainer = styled.div`
   display: inline-flex;
   width: 100%;
   justify-content: center;
-  margin-top: 10%;
+  margin-top: 15%;
   flex-wrap: wrap;
   margin-bottom: 3em;
 `;
 
 const TitleContainer = styled.div`
-  margin-top: 15%;
+  margin-top: 25%;
   text-align: center;
   width: 100%;
 `;
@@ -74,10 +72,12 @@ const App = (props: AppProps) => {
   const [searchResult, setSearchResult] = useState([]);
   const [loading, setLoading] = useState(false);
   const [status, setStatus] = useState("");
+  const [scrolled, setScrolled] = useState(false);
   const lastQ = useContext(QueryContext);
   
   
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     if(lastQ.lastQuery !== ''){
       const fetchData = async () => {
         const searchResult = await searchLastQuery(lastQ.lastQuery);
@@ -85,6 +85,13 @@ const App = (props: AppProps) => {
       }
     fetchData();      
     }
+
+    
+    window.addEventListener('scroll', handleScroll, true);
+    return(() => {
+      window.removeEventListener('scroll', handleScroll, true);
+    });
+
   }, [lastQ.lastQuery]);
 
   const getArtistByName = async (name: string) => {
@@ -136,10 +143,13 @@ const App = (props: AppProps) => {
       getArtistByName(searchString);
     }
   }
+
+  const handleScroll = () => window.scrollY > 200 && !scrolled ? setScrolled(true) : setScrolled(false);
+  
   return (
     <>
       <div className="App">
-        <Topbar>
+        <Topbar scrolled={scrolled}>
           <TopContainer>
             <TextInput
               onKeyDown={handleKeyDown}

@@ -1,6 +1,10 @@
 import React, {FunctionComponent} from 'react';
 import styled from 'styled-components';
 
+interface topbarProps {
+  scrolled?: boolean;
+}
+
 const StyledBar = styled.div`
   width: 100%;
   top:0;
@@ -10,8 +14,13 @@ const StyledBar = styled.div`
   z-index: 9999;
   background-color:rgba(9, 32, 63, 0.5);
   display: flex;
-  padding-bottom: 2em;
-  min-height: 100px;
+  padding-bottom: 3.5em;
+  padding-bottom: ${(props: topbarProps) => props.scrolled ? '.25em' : '2em'}
+  padding-top: ${(props: topbarProps) => props.scrolled ? '0em' : '2em'}
+  transition: .5s;
+  min-height: 50px;
+
+
 
   &:before {
     content: '';
@@ -26,10 +35,12 @@ const StyledBar = styled.div`
   }
 `
 
-const Topbar: FunctionComponent= ({children}) => {
+
+
+const Topbar: FunctionComponent<topbarProps> = ({children, scrolled}) => {
   return(
     <div>
-      <StyledBar>{children} </StyledBar>
+      <StyledBar scrolled={scrolled} >{children} </StyledBar>
     </div>
   )
 }

@@ -114,6 +114,7 @@ const Artist = (props: ArtistProps) => {
 
 
   const ToggleMusicPlayer = (id: string) => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     setSelectedAlbumSrc(`https://open.spotify.com/embed/album/${id}`);    
     setPlayerVisible(true);
   }
