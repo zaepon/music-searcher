@@ -80,7 +80,7 @@ const App = (props: AppProps) => {
     return(() => {
       window.removeEventListener('scroll', handleScroll, true);
     });
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastQ.lastQuery]);
 
   const getArtistByName = async (name: string) => {
