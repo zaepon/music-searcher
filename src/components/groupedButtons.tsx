@@ -14,6 +14,11 @@ interface GroupedButtonsProps {
   propertyKey: string;
   data: Array<Object>;
   actions: Array<ActionObject>;
+  selected: string;
+}
+
+interface ToggleButton {
+  isSelected: boolean;
 }
 
 interface ActionObject {
@@ -23,7 +28,8 @@ interface ActionObject {
 
 const getKeyValues = (arr: Array<Object>, propKey: string) => {
   const reducer = (newArr: string[], curr: any) => {
-    const check = newArr.includes(curr[propKey])
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    newArr.includes(curr[propKey])
       ? "null"
       : newArr.push(curr[propKey]);
     return newArr;
@@ -54,7 +60,7 @@ const GroupedButtons = (props: GroupedButtonsProps) => {
           getKeyValues(props.data, props.propertyKey),
           props.actions
         ).map((b, i) => (
-          <TextButton onClick={b.onClick} key={i}>{b.keyValue}</TextButton>
+          <TextButton isSelected={props.selected === b.keyValue} onClick={b.onClick} key={i}>{b.keyValue}</TextButton>
         ))}
       </Flex>
     </>

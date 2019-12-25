@@ -1,8 +1,17 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { Box, Image } from "rebass"; 
 
 import playButton from './play-button.svg';
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
 
 const StyledIcon = styled(Box)`
   opacity: 0;
@@ -21,6 +30,7 @@ const StyledImg = styled(Image)`
 
 const ImgContainer = styled(Box)`
   position: relative;
+  animation: ${fadeIn} 1s linear;
   &:hover {
     opacity: 0.8;
   }
