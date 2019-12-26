@@ -55,7 +55,9 @@ const Artist = (props: ArtistProps) => {
   const [sortType, setSortType] = useState("album");
 
   useEffect(() => {
+    const debounceRef = debounce(handleScroll, 200);
     const fetchData = async () => {
+
       window.scrollTo({ top: 0, behavior: "smooth" });
       setLoading(true);
       const artist = await searchArtistById(props.id);
@@ -67,9 +69,9 @@ const Artist = (props: ArtistProps) => {
     };
     fetchData();
 
-    window.addEventListener("scroll", debounce(handleScroll, 200), true);
+    window.addEventListener("scroll", debounceRef, true);
     return () => {
-      window.removeEventListener("scroll", handleScroll, true);
+      window.removeEventListener("scroll", debounceRef, true);
     };
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -90,7 +92,6 @@ const Artist = (props: ArtistProps) => {
     setPlayerVisible(true);
   };
 
-  console.log(albums);
   return (
     <>
       <Topbar scrolled={scrolled}>

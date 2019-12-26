@@ -17,7 +17,7 @@ import {
   getSimilarArtists,
   searchLastQuery
 } from "../api/apUtils";
-import { debounce } from "../utils/general";
+import { debounce, DebounceHook } from "../utils/general";
 
 const TopContainer = styled(Box)`
   text-align: center;
@@ -70,6 +70,7 @@ const App = (props: AppProps) => {
   const lastQ = useContext(QueryContext);
 
   useEffect(() => {
+    const debounceRef = debounce(handleScroll, 200);
     window.scrollTo({ top: 0, behavior: "smooth" });
     if (lastQ.lastQuery !== "") {
       const fetchData = async () => {
@@ -78,16 +79,21 @@ const App = (props: AppProps) => {
       };
       fetchData();
     }
-    window.addEventListener("scroll", debounce(handleScroll, 200), true);
+    window.addEventListener("scroll", debounceRef, true);
     return () => {
-      window.removeEventListener("scroll", handleScroll, true);
+      window.removeEventListener("scroll", debounceRef, true);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastQ.lastQuery]);
 
+
+  const debounceSearch = DebounceHook(searchString, 500);
   useEffect(() => {
-    if(searchString.length > 0) debounce(getArtistByName(searchString), 500);
-  }, [searchString])
+     if(debounceSearch){
+      getArtistByName(debounceSearch);
+     }
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debounceSearch])
 
   const getArtistByName = async (name: string) => {
     setArtistName(name);
