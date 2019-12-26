@@ -3,6 +3,8 @@ import styled from "styled-components";
 import { Flex, Box, Image } from "rebass";
 
 import { searchArtistById, getArtistAlbums } from "../api/apUtils";
+import { debounce } from "../utils/general";
+
 import Topbar from "../components/topbar";
 import Header from "../components/header";
 import Loader from "../components/loader";
@@ -50,7 +52,7 @@ const Artist = (props: ArtistProps) => {
   const [loading, setLoading] = useState(false);
   const [playerVisible, setPlayerVisible] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [sortType, setSortType] =useState("album");
+  const [sortType, setSortType] = useState("album");
 
   useEffect(() => {
     const fetchData = async () => {
@@ -65,7 +67,7 @@ const Artist = (props: ArtistProps) => {
     };
     fetchData();
 
-    window.addEventListener("scroll", handleScroll, true);
+    window.addEventListener("scroll", debounce(handleScroll, 200), true);
     return () => {
       window.removeEventListener("scroll", handleScroll, true);
     };
@@ -107,12 +109,16 @@ const Artist = (props: ArtistProps) => {
               title={loading ? "...." : artist.name}
               type={"h1"}
               color={"#CAE5FF"}
-              style={{marginLeft: '1em'}}
+              style={{ marginLeft: "1em" }}
             />
           </Flex>
-          <Box>
-      </Box>
-        <Button style={{position: 'absolute', left: 0, top: 0, margin: '1em'}} onClick={props.goBack}>Return</Button>
+          <Box></Box>
+          <Button
+            style={{ position: "absolute", left: 0, top: 0, margin: "1em" }}
+            onClick={props.goBack}
+          >
+            Return
+          </Button>
         </TopContainer>
       </Topbar>
 
@@ -130,27 +136,32 @@ const Artist = (props: ArtistProps) => {
       >
         {loading && <Loader />}
         {albums.length > 0 && (
-          <Flex width={"100%"} pb={"2em"} mt={'15em'} justifyContent={"center"}>
+          <Flex width={"100%"} pb={"2em"} mt={"15em"} justifyContent={"center"}>
             <GroupedButtons
               propertyKey="album_type"
               data={albums}
               selected={sortType}
               actions={[
-                { keyValue: "album", onClick: () => setSortType('album') },
-                { keyValue: "single", onClick: () => setSortType('single') },
-                { keyValue: "compilation", onClick: () => setSortType('compilation') },
+                { keyValue: "album", onClick: () => setSortType("album") },
+                { keyValue: "single", onClick: () => setSortType("single") },
+                {
+                  keyValue: "compilation",
+                  onClick: () => setSortType("compilation")
+                }
               ]}
             />
           </Flex>
         )}
         {albums.length > 0 &&
-          albums.filter((a: AlbumProps) => a.album_type === sortType).map((album: AlbumProps) => (
-            <ImageCard
-              key={album.id}
-              img={album.images[1].url}
-              onClick={() => ToggleMusicPlayer(album.id)}
-            />
-          ))}
+          albums
+            .filter((a: AlbumProps) => a.album_type === sortType)
+            .map((album: AlbumProps) => (
+              <ImageCard
+                key={album.id}
+                img={album.images[1].url}
+                onClick={() => ToggleMusicPlayer(album.id)}
+              />
+            ))}
       </Flex>
       {albums.length < albumsInfo.total && (
         <Flex

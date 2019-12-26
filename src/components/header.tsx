@@ -5,7 +5,7 @@ export interface HeaderProps {
   title?: string;
   color?: string;
   className?: string
-  style?: Object
+  style?: object
 }
 
 const Header = (props: HeaderProps) => {

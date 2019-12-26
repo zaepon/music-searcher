@@ -10,9 +10,14 @@ import Button from "../components/button";
 import Loader from "../components/loader";
 import TemplateImage from "../test.png";
 import Topbar from "../components/topbar";
-import {QueryContext} from '../index';
+import { QueryContext } from "../index";
 
-import { searchArtist, getSimilarArtists, searchLastQuery } from "../api/apUtils";
+import {
+  searchArtist,
+  getSimilarArtists,
+  searchLastQuery
+} from "../api/apUtils";
+import { debounce } from "../utils/general";
 
 const TopContainer = styled(Box)`
   text-align: center;
@@ -63,23 +68,21 @@ const App = (props: AppProps) => {
   const [status, setStatus] = useState("");
   const [scrolled, setScrolled] = useState(false);
   const lastQ = useContext(QueryContext);
-  
-  
+
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-    if(lastQ.lastQuery !== ''){
+    if (lastQ.lastQuery !== "") {
       const fetchData = async () => {
         const searchResult = await searchLastQuery(lastQ.lastQuery);
         setSearchResult(searchResult);
-      }
-    fetchData();      
+      };
+      fetchData();
     }
 
-    
-    window.addEventListener('scroll', handleScroll, true);
-    return(() => {
-      window.removeEventListener('scroll', handleScroll, true);
-    });
+    window.addEventListener("scroll", debounce(handleScroll, 200), true);
+    return () => {
+      window.removeEventListener("scroll", handleScroll, true);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastQ.lastQuery]);
 
@@ -104,7 +107,9 @@ const App = (props: AppProps) => {
     setStatus(state);
     setSearchResult(searchResult);
     setLoading(false);
-    lastQ.setQuery(`https://api.spotify.com/v1/artists/${artist.id}/related-artists`);
+    lastQ.setQuery(
+      `https://api.spotify.com/v1/artists/${artist.id}/related-artists`
+    );
   };
 
   const setStatusMessage = (results: object[], name: string, type: string) => {
@@ -128,18 +133,19 @@ const App = (props: AppProps) => {
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
-    if(e.key === 'Enter'){
+    if (e.key === "Enter") {
       getArtistByName(searchString);
     }
-  }
+  };
 
-  const handleScroll = () => window.scrollY > 200 && !scrolled ? setScrolled(true) : setScrolled(false);
-  
+  const handleScroll = () =>
+    window.scrollY > 200 && !scrolled ? setScrolled(true) : setScrolled(false);
+
   return (
     <>
       <Box className="App">
         <Topbar scrolled={scrolled}>
-          <TopContainer width={'100%'}>
+          <TopContainer width={"100%"}>
             <TextInput
               onKeyDown={handleKeyDown}
               value={searchString}
@@ -157,7 +163,7 @@ const App = (props: AppProps) => {
         </Topbar>
 
         {!loading && artistName && (
-          <TitleContainer mt={'25%'} width={'100%'}>
+          <TitleContainer mt={"25%"} width={"100%"}>
             <>
               {
                 <StyledIcon
@@ -175,7 +181,13 @@ const App = (props: AppProps) => {
           </TitleContainer>
         )}
 
-        <Flex width={'100%'} justifyContent={'center'} mt={'15%'} mb={'3%'} flexWrap={'wrap'}>
+        <Flex
+          width={"100%"}
+          justifyContent={"center"}
+          mt={"15%"}
+          mb={"3%"}
+          flexWrap={"wrap"}
+        >
           {loading && <Loader />}
           {!loading &&
             searchResult.length > 0 &&

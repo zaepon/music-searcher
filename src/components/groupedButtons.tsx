@@ -12,7 +12,7 @@ const TextButton = styled(Button)`
 
 interface GroupedButtonsProps {
   propertyKey: string;
-  data: Array<Object>;
+  data: Array<object>;
   actions: Array<ActionObject>;
   selected: string;
 }
@@ -26,7 +26,7 @@ interface ActionObject {
   onClick: () => void;
 }
 
-const getKeyValues = (arr: Array<Object>, propKey: string) => {
+const getKeyValues = (arr: Array<object>, propKey: string) => {
   const reducer = (newArr: string[], curr: any) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     newArr.includes(curr[propKey])
