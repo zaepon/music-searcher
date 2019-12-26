@@ -1,4 +1,4 @@
-export const debounce = (cb: () => void, ms: number) => {
+export const debounce = (cb: any, ms: number) => {
   let timeout = 0;
 
   return function(this: any, ...args: []) {

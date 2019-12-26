@@ -78,13 +78,16 @@ const App = (props: AppProps) => {
       };
       fetchData();
     }
-
     window.addEventListener("scroll", debounce(handleScroll, 200), true);
     return () => {
       window.removeEventListener("scroll", handleScroll, true);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastQ.lastQuery]);
+
+  useEffect(() => {
+    if(searchString.length > 0) debounce(getArtistByName(searchString), 500);
+  }, [searchString])
 
   const getArtistByName = async (name: string) => {
     setArtistName(name);
