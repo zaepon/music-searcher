@@ -166,7 +166,7 @@ const App = (props: AppProps) => {
         </Topbar>
 
         {!loading && artistName && (
-          <TitleContainer mt={"25%"} width={"100%"}>
+          <TitleContainer mt={"15em"} width={"100%"}>
             <>
               {
                 <StyledIcon

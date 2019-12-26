@@ -123,7 +123,7 @@ const Artist = (props: ArtistProps) => {
       </Topbar>
 
       {playerVisible && (
-        <Flex alignItems={"center"} justifyContent={"center"} mt={"4.5em"}>
+        <Flex alignItems={"center"} justifyContent={"center"} mt={"15em"}>
           <Player src={selectedAlbumSrc} />
         </Flex>
       )}
