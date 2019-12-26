@@ -110,7 +110,6 @@ const App = (props: AppProps) => {
     const n = artist.name || "";
     setLoading(true);
     setArtistName(n);
-    setSearchString(n);
     const searchResult = await getSimilarArtists(artist.id || "");
     const state = setStatusMessage(searchResult, n, "similar");
     setStatus(state);
@@ -220,7 +219,6 @@ const App = (props: AppProps) => {
                       label: "Search similar music",
                       action: () => {
                         setArtistName(artist.name || "");
-                        setSearchString(artist.name || "");
                         findSimilarArtists(artist);
                         window.scrollTo({ top: 0, behavior: "smooth" });
                       }
