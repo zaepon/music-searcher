@@ -149,7 +149,7 @@ const App = (props: AppProps) => {
   const handleScroll = () =>
     window.scrollY > 200 && !scrolled ? setScrolled(true) : setScrolled(false);
 
-  console.log(props);
+  
   return (
     <>
       <Box className="App">
