@@ -8,22 +8,24 @@ const Button = styled.button<ToggleButtonProps>`
   width: 100px;
   height: 35px;
   font-size: .8rem;
-  background-color: ${props => props.disabled ? 'grey' : '#7286a3'};
-  border: ${props => props.disabled ? '0px' : '2px solid #7286a3'};
-  border-radius: 8px;
+  background-color: transparent;
+  border: ${props => props.disabled ? '0px' : 'none'};
+  border-bottom: 2px solid rgb(202, 229, 255);
+  
+  border-radius: 1px;
+  border-top-right-radius: 10px;
+  border-top-left-radius: 10px;
   cursor: pointer;
   color: ${props => props.disabled ? '#9fa1a2' : 'white'};
   text-decoration: ${props => props.isSelected ? 'underline' : 'none'}
   font-weight: 700;
   &:hover {
-    background-color: #fff;
     color: #7286a3;
-    border: 1px solid #564787;
-    transition: 0.5s;
+    border-bottom: 1px solid #564787;
+    transition: 0.25s;
   }
   &:active {
-    background-color: #564787;
-    border: 1px solid #564787;
+    border-bottom: 1px solid #564787;
     color: #fff;
   }
   &:focus {
