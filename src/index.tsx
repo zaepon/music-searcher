@@ -1,5 +1,6 @@
 import React, {createContext, useState} from "react";
 import ReactDOM from "react-dom";
+import { createBrowserHistory } from "history";
 import Main from "./containers/Main";
 import Artist from './containers/Artist';
 
@@ -21,9 +22,14 @@ interface QueryInterface {
 }
 
 
+interface HistoryProps {
+  history: any
+}
+
 export const QueryContext = createContext({} as QueryInterface);
 
-const Root = () =>{
+const Root = (props: HistoryProps) =>{
+
 const [lastQuery, setLastQuery] = useState('');
 const setLastQueryStr = (url: string) => {
     setLastQuery(url);
@@ -36,7 +42,7 @@ const setLastQueryStr = (url: string) => {
           <Switch>
             <QueryContext.Provider value={{lastQuery: lastQuery, setQuery: setLastQueryStr}}>
               <Route path='/artist/:id' render={({match, history}: RouteComponentProps<RouteInfo>) => (            
-                <Artist id={match.params.id} goBack={() => history.goBack()}/>
+                <Artist id={match.params.id} goBack={() => history.push('/')}/>
               )}/>
               <Route exact={true} path='/' component={Main} />
             </QueryContext.Provider>
@@ -48,4 +54,6 @@ const setLastQueryStr = (url: string) => {
   );
 }
 
-ReactDOM.render(<Root />, document.getElementById("root"));
+
+const customHistory = createBrowserHistory();
+ReactDOM.render(<Root  history={customHistory}/>, document.getElementById("root"));

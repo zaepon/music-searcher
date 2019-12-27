@@ -91,7 +91,7 @@ const Artist = (props: ArtistProps) => {
     setSelectedAlbumSrc(`https://open.spotify.com/embed/album/${id}`);
     setPlayerVisible(true);
   };
-
+  
   return (
     <>
       <Topbar scrolled={scrolled}>
