@@ -31,10 +31,14 @@ const StyledImg = styled(Image)`
 const ImgContainer = styled(Box)`
   position: relative;
   animation: ${fadeIn} 1s linear;
+  transition: .25s ease-in-out;
+
   &:hover {
     opacity: 0.8;
+    transform: scale(1.05);
+    transition: .25s ease-in-out;
   }
-  
+    
   &:hover ${StyledIcon} {
     opacity: 1;
     background-image: url(${playButton});

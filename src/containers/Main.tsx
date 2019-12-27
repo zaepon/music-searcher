@@ -204,11 +204,14 @@ const App = (props: AppProps) => {
               let imageObj = artist.images!.filter(
                 (img: ImageProps) => img.width === 640
               );
+
+              if(!imageObj[0]) return;
+
               return (
                 <Card
                   key={artist.id}
                   title={artist.name}
-                  img={imageObj[0] ? imageObj[0].url : TemplateImage}
+                  img={imageObj[0].url}
                   text={artist.genres!.join()}
                   fillrate={artist.popularity}
                   menuItems={[

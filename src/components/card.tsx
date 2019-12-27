@@ -34,11 +34,13 @@ const CardContainer = styled(Box)`
   min-height: 250px;
   text-align: initial;
   border: 2px solid #090f17;
-  border-radius: 10px;
+  border-radius: 6px;
   cursor: pointer;
   color: #cae5ff;
   animation: ${fadeIn} 2s linear;
   position: relative;
+  box-shadow: 0 .25rem .25rem rgba(0,0,0,0.2),
+    0 0 1rem rgba(0,0,0,0.2);
 
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -46,6 +48,11 @@ const CardContainer = styled(Box)`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  transition: .25s ease-in-out;
+  &:hover {
+    transform: scale(1.05);
+    transition: .25s ease-in-out;
+  }
 
   &:hover ${Menu} {
     height: 100%;
