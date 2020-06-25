@@ -1,13 +1,21 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Music Searcher Application
+available at https://ms.henril.com/
 
-## Available Scripts
+Easy way to search new music based on artists you like. Search by artist name to get similar artists as recommendation. 
 
-In the project directory, you can run:
+Uses spotify API as data source. 
 
-### `npm start`
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+## Development
+
+### install
+```
+yarn
+
+```
+
+Start the development server
+```
+yarn start
+```  
