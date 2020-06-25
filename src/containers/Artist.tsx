@@ -11,7 +11,6 @@ import Loader from "../components/loader";
 import ImageCard from "../components/imageCard";
 import Button from "../components/button";
 import Player from "../components/player";
-import GroupedButtons from "../components/groupedButtons";
 import TemplateImage from "../test.png";
 
 interface ArtistProps {
@@ -52,7 +51,6 @@ const Artist = (props: ArtistProps) => {
   const [loading, setLoading] = useState(false);
   const [playerVisible, setPlayerVisible] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [sortType, setSortType] = useState("album");
 
   useEffect(() => {
     const debounceRef = debounce(handleScroll, 200);
@@ -138,24 +136,11 @@ const Artist = (props: ArtistProps) => {
         {loading && <Loader />}
         {albums.length > 0 && (
           <Flex width={"100%"} pb={"2em"} mt={"15em"} justifyContent={"center"}>
-            <GroupedButtons
-              propertyKey="album_type"
-              data={albums}
-              selected={sortType}
-              actions={[
-                { keyValue: "album", onClick: () => setSortType("album") },
-                { keyValue: "single", onClick: () => setSortType("single") },
-                {
-                  keyValue: "compilation",
-                  onClick: () => setSortType("compilation")
-                }
-              ]}
-            />
+
           </Flex>
         )}
         {albums.length > 0 &&
           albums
-            .filter((a: AlbumProps) => a.album_type === sortType)
             .map((album: AlbumProps) => (
               <ImageCard
                 key={album.id}

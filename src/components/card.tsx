@@ -29,7 +29,7 @@ const ButtonContainer = styled(Flex)`
 
 const CardContainer = styled(Box)`
   background-color: #445b6f;
-  width: 250px;
+  width: 360px;
   min-width: 200px;
   min-height: 250px;
   text-align: initial;

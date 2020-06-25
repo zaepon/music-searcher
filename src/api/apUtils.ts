@@ -30,9 +30,9 @@ export const searchLastQuery = async (url: string) => {
 
 
 export const getArtistAlbums = async (id: string, offset?: number) => {
-  let url = `https://api.spotify.com/v1/artists/${id}/albums`;
+  let url = `https://api.spotify.com/v1/artists/${id}/albums?limit=50`;
 
-  if(offset) url += `?offset=${offset}`;
+  if(offset) url += `&offset=${offset}`;
 
   const res = await getData(url);
   return res?.data;

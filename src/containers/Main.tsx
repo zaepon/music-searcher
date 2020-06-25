@@ -6,9 +6,7 @@ import { History, LocationState } from "history";
 import Header from "../components/header";
 import Card from "../components/card";
 import TextInput from "../components/textInput";
-import Button from "../components/button";
 import Loader from "../components/loader";
-import TemplateImage from "../test.png";
 import Topbar from "../components/topbar";
 import { QueryContext } from "../index";
 
@@ -28,9 +26,6 @@ const TitleContainer = styled(Box)`
   text-align: center;
 `;
 
-const StyledIcon = styled.svg`
-  fill: #e16e6e;
-`;
 
 interface AppProps {
   getSimilarArtists: (id: string) => object;
@@ -161,30 +156,12 @@ const App = (props: AppProps) => {
               onChange={e => setSearchString(e.target.value)}
               placeholder={"Search for artist or band.."}
             />
-            <Button
-              style={{ marginLeft: "1em" }}
-              disabled={searchString.length < 1}
-              onClick={() => getArtistByName(searchString)}
-            >
-              Search
-            </Button>
           </TopContainer>
         </Topbar>
 
         {!loading && artistName && (
           <TitleContainer mt={"15em"} width={"100%"}>
             <>
-              {
-                <StyledIcon
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                >
-                  <path d="M0 0h24v24H0z" fill="none" />
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" />
-                </StyledIcon>
-              }
               <Header title={status} type={"h1"} color={"#CAE5FF"} />
             </>
           </TitleContainer>
@@ -205,7 +182,7 @@ const App = (props: AppProps) => {
                 (img: ImageProps) => img.width === 640
               );
 
-              if(!imageObj[0]) return;
+              if(!imageObj[0]) return null;
 
               return (
                 <Card
