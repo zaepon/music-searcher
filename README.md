@@ -15,7 +15,7 @@ yarn
 
 ```
 
-Start the development server
+### Start the development server
 ```
 yarn start
 ```  
