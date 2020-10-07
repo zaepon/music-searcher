@@ -2,7 +2,8 @@ import React from "react";
 import styled, { keyframes } from "styled-components";
 import { Box, Flex, Image } from "rebass";
 import Header from "./header";
-
+import Tag from "./tag"
+ 
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -22,7 +23,7 @@ const Menu = styled(Box)`
 
 const ButtonContainer = styled(Flex)`
   overflow: hidden;
-  height: 0;
+  height: 100%;
   top: 50%;
   left: 50%;
 `;
@@ -33,14 +34,12 @@ const CardContainer = styled(Box)`
   min-width: 200px;
   min-height: 250px;
   text-align: initial;
-  border: 2px solid #090f17;
   border-radius: 6px;
   cursor: pointer;
   color: #cae5ff;
   animation: ${fadeIn} 2s linear;
   position: relative;
-  box-shadow: 0 .25rem .25rem rgba(0,0,0,0.2),
-    0 0 1rem rgba(0,0,0,0.2);
+  box-shadow: 0 0.25rem 0.25rem rgba(0, 0, 0, 0.2), 0 0 1rem rgba(0, 0, 0, 0.2);
 
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -48,19 +47,19 @@ const CardContainer = styled(Box)`
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
-  transition: .25s ease-in-out;
+  transition: 0.25s ease-in-out;
   &:hover {
     transform: scale(1.05);
-    transition: .25s ease-in-out;
-  }
-
-  &:hover ${Menu} {
-    height: 100%;
-  }
-  &:hover ${ButtonContainer} {
-    height: 100%;
+    transition: 0.25s ease-in-out;
   }
 `;
+
+const TagContainer = styled.ul`
+  list-style: none;
+  margin 0;
+  overflow: none;
+  padding: 0;
+`
 
 const StyledHeader = styled(Header)`
   color: #d8e2dc;
@@ -68,7 +67,14 @@ const StyledHeader = styled(Header)`
 `;
 
 const StyledImg = styled(Image)`
-  min-height: 231px;
+  && {
+    object-fit: cover;
+    min-height: 300px;
+    height: 15vw;
+  }
+  &: hover {
+    opacity: 0.6;
+  }
 `;
 
 const Description = styled.p`
@@ -78,20 +84,19 @@ const Description = styled.p`
 
 const MenuButton = styled.button`
   padding: 1em;
-  background-color: #3d597f;
-  border: 2px solid #3d597f;
+  margin-top: 0;
+  background-color: #2a2b2b;
   cursor: pointer;
   color: white;
   font-weight: 700;
+  border: none
+  border-top-left-radius: 25px;
+  border-bottom-left-radius: 25px;
 
-  &:last-child {
-    border-bottom-left-radius: 20px;
-    border-bottom-right-radius: 20px;
-  }
   &:hover {
     background-color: #fff;
     color: #3d597f;
-    transition: 0.5s;
+    transition: 0.15s;
   }
   &:active {
     background-color: #3d597f;
@@ -111,7 +116,9 @@ export interface CardProps {
   onClick?: () => void;
   title?: string;
   text?: string;
+  tags?: string[];
   img?: string;
+  imgAction?: () => void;
   fillrate?: number;
   menuItems?: MenuItem[];
   className?: string;
@@ -126,8 +133,19 @@ const Card = (props: CardProps) => {
   return (
     <>
       <CardContainer className={props.className} mr={"1.5em"} mt={"3em"}>
-        <StyledImg src={props.img} sx={{ width: ["100%"], borderRadius: 5 }} />
-        <StyledHeader title={props.title} type={"h3"} />
+        <StyledImg src={props.img} sx={{ width: ["100%"], borderRadius: 5 }} onClick={props.imgAction} />
+        <Flex justifyContent="space-between">
+          <StyledHeader title={props.title} type={"h3"} />
+          <ButtonContainer flexDirection={"row"}>
+            {props.menuItems?.map((menuItem, index) => {
+              return (
+                <MenuButton key={index} onClick={menuItem.action}>
+                  {menuItem.label}
+                </MenuButton>
+              );
+            })}
+          </ButtonContainer>
+        </Flex>
         <Description>{props.text}</Description>
         {props.menuItems && (
           <Menu>
@@ -142,6 +160,14 @@ const Card = (props: CardProps) => {
             </ButtonContainer>
           </Menu>
         )}
+        <TagContainer>
+
+          {props.tags?.map(t => {
+            return (
+              <Tag text={t} />
+            )
+          })}
+        </TagContainer>
       </CardContainer>
     </>
   );

@@ -189,15 +189,12 @@ const App = (props: AppProps) => {
                   key={artist.id}
                   title={artist.name}
                   img={imageObj[0].url}
-                  text={artist.genres!.join()}
+                  imgAction={() => props.history.push(`/artist/${artist.id}`)}
+                  tags={artist.genres}
                   fillrate={artist.popularity}
                   menuItems={[
                     {
-                      label: "More information",
-                      action: () => props.history.push(`/artist/${artist.id}`)
-                    },
-                    {
-                      label: "Search similar music",
+                      label: "Similar music",
                       action: () => {
                         setArtistName(artist.name || "");
                         findSimilarArtists(artist);
