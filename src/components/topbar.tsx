@@ -12,7 +12,7 @@ const StyledBar = styled(Flex)`
   right: 0;
   position:fixed;
   z-index: 9999;
-  background-color:rgba(9, 32, 63, 0.8);
+  background-color: ${props => props.theme.colors.dark}
   padding-bottom: 3.5em;
   padding-bottom: ${(props: topbarProps) => props.scrolled ? '.25em' : '2em'}
   padding-top: ${(props: topbarProps) => props.scrolled ? '0em' : '2em'}

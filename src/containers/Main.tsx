@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import styled from "styled-components";
+import styled, {withTheme} from "styled-components";
 import { Flex, Box } from "rebass";
 import { History, LocationState } from "history";
 
@@ -144,6 +144,7 @@ const App = (props: AppProps) => {
   const handleScroll = () =>
     window.scrollY > 200 && !scrolled ? setScrolled(true) : setScrolled(false);
 
+
   
   return (
     <>
@@ -162,7 +163,7 @@ const App = (props: AppProps) => {
         {!loading && artistName && (
           <TitleContainer mt={"15em"} width={"100%"}>
             <>
-              <Header title={status} type={"h1"} color={"#CAE5FF"} />
+              <Header title={status} type={"h1"} />
             </>
           </TitleContainer>
         )}
@@ -211,4 +212,4 @@ const App = (props: AppProps) => {
   );
 };
 
-export default App;
+export default withTheme(App as any);

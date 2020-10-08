@@ -2,11 +2,17 @@
 import { DefaultTheme, createGlobalStyle } from 'styled-components'
 
 const Theme: DefaultTheme = {
-  borderRadius: '5px',
 
   colors: {
     main: 'cyan',
     secondary: 'magenta',
+    dark: '#0b0c10',
+    color2: '#1f2833',
+    color3: '#c5c6c7',
+    color4: '#66fcf1',
+    light: '#fff',
+    stark: '#e7dfdd',
+    color5: '#45a29e'
   },
 }
 
@@ -14,11 +20,9 @@ const Theme: DefaultTheme = {
 const GlobalStyle = createGlobalStyle`
   body {
     min-height: 100vh;
-    background-image: linear-gradient(0deg,#4e4376,#2b5876  95%);
     font-family: verdana;
-    background-attachment: fixed;
+    background-color: #0b0c10;
   }
-
 `
 
 export { Theme, GlobalStyle }

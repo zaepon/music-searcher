@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const TagLi = styled.li`
-background: #4e4376;
+background: ${props => props.theme.colors.color2};
 color: #e0e0e0;
 height: 15px;
 display: inline-block;

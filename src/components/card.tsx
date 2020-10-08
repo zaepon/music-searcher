@@ -29,7 +29,7 @@ const ButtonContainer = styled(Flex)`
 `;
 
 const CardContainer = styled(Box)`
-  background-color: #445b6f;
+  background-color: ${props => props.theme.colors.star};
   width: 360px;
   min-width: 200px;
   min-height: 250px;
@@ -62,7 +62,7 @@ const TagContainer = styled.ul`
 `
 
 const StyledHeader = styled(Header)`
-  color: #d8e2dc;
+  color: ${props => props.theme.colors.jewel};
   margin: 0.75em;
 `;
 
@@ -85,9 +85,9 @@ const Description = styled.p`
 const MenuButton = styled.button`
   padding: 1em;
   margin-top: 0;
-  background-color: #2a2b2b;
+  background-color: ${props => props.theme.colors.color2};
   cursor: pointer;
-  color: white;
+  color: ${props => props.theme.colors.stark};
   font-weight: 700;
   border: none
   border-top-left-radius: 25px;
@@ -162,9 +162,9 @@ const Card = (props: CardProps) => {
         )}
         <TagContainer>
 
-          {props.tags?.map(t => {
+          {props.tags?.map((t, k) => {
             return (
-              <Tag text={t} />
+              <Tag key={k} text={t} />
             )
           })}
         </TagContainer>
