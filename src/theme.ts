@@ -2,7 +2,7 @@
 import { DefaultTheme, createGlobalStyle } from 'styled-components'
 
 const Theme: DefaultTheme = {
-
+  breakpoints: ['40em', '52em', '64em'],
   colors: {
     main: 'cyan',
     secondary: 'magenta',
