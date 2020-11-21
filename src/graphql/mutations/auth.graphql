@@ -1,0 +1,6 @@
+mutation getAccessToken($code: String!) {
+  getAccessToken(code: $code) {
+    token
+    expires
+  }
+}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import styled, {withTheme} from "styled-components";
+import styled, { withTheme } from "styled-components";
 import { Flex, Box } from "rebass";
 import { History, LocationState } from "history";
 
@@ -8,12 +8,12 @@ import Card from "../components/card";
 import TextInput from "../components/textInput";
 import Loader from "../components/loader";
 import Topbar from "../components/topbar";
-import { QueryContext } from "../index";
-
+import { QueryContext } from "../routes";
+import LoginIndicator from "../components/loginIndicator";
 import {
   searchArtist,
   getSimilarArtists,
-  searchLastQuery
+  searchLastQuery,
 } from "../api/apUtils";
 import { debounce, DebounceHook } from "../utils/general";
 
@@ -25,7 +25,6 @@ const TopContainer = styled(Box)`
 const TitleContainer = styled(Box)`
   text-align: center;
 `;
-
 
 interface AppProps {
   getSimilarArtists: (id: string) => object;
@@ -63,7 +62,6 @@ const App = (props: AppProps) => {
   const [status, setStatus] = useState("");
   const [scrolled, setScrolled] = useState(false);
   const lastQ = useContext(QueryContext);
-
   useEffect(() => {
     const debounceRef = debounce(handleScroll, 200);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -81,14 +79,13 @@ const App = (props: AppProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [lastQ.lastQuery]);
 
-
   const debounceSearch = DebounceHook(searchString, 500);
   useEffect(() => {
-     if(debounceSearch){
+    if (debounceSearch) {
       getArtistByName(debounceSearch);
-     }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debounceSearch])
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debounceSearch]);
 
   const getArtistByName = async (name: string) => {
     setArtistName(name);
@@ -144,8 +141,6 @@ const App = (props: AppProps) => {
   const handleScroll = () =>
     window.scrollY > 200 && !scrolled ? setScrolled(true) : setScrolled(false);
 
-
-  
   return (
     <>
       <Box className="App">
@@ -154,7 +149,7 @@ const App = (props: AppProps) => {
             <TextInput
               onKeyDown={handleKeyDown}
               value={searchString}
-              onChange={e => setSearchString(e.target.value)}
+              onChange={(e) => setSearchString(e.target.value)}
               placeholder={"Search for artist or band.."}
             />
           </TopContainer>
@@ -183,7 +178,7 @@ const App = (props: AppProps) => {
                 (img: ImageProps) => img.width === 640
               );
 
-              if(!imageObj[0]) return null;
+              if (!imageObj[0]) return null;
 
               return (
                 <Card
@@ -200,12 +195,23 @@ const App = (props: AppProps) => {
                         setArtistName(artist.name || "");
                         findSimilarArtists(artist);
                         window.scrollTo({ top: 0, behavior: "smooth" });
-                      }
-                    }
+                      },
+                    },
                   ]}
                 />
               );
             })}
+        </Flex>
+        <Flex justifyContent="center">
+          {!loading && (
+            <LoginIndicator
+              url={`https://accounts.spotify.com/authorize?client_id=${
+                process.env.REACT_APP_CLIENT_ID
+              }&response_type=code&redirect_uri=${encodeURIComponent(
+                process.env.REACT_APP_LOGIN_CALLBACK_URL as string
+              )}&scope=user-read-private`}
+            />
+          )}
         </Flex>
       </Box>
     </>

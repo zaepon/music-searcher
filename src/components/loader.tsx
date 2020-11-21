@@ -8,10 +8,10 @@ const spin = keyframes`
 `;
 
 const LoaderDiv = styled(Box)`
-  border: 16px solid #e0e0de;
-  border-top: 16px solid #5B4E77;
+  border: 12px solid rgb(36,37,47);
+  border-top: 12px solid #EE6F87;
   border-radius: 50%;
-  animation: ${spin} 1s linear infinite;
+  animation: ${spin} .7s linear infinite;
   position: absolute;
   top: 50%;
 `;

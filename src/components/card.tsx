@@ -2,8 +2,8 @@ import React from "react";
 import styled, { keyframes } from "styled-components";
 import { Box, Flex, Image } from "rebass";
 import Header from "./header";
-import Tag from "./tag"
- 
+import Tag from "./tag";
+
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -29,7 +29,7 @@ const ButtonContainer = styled(Flex)`
 `;
 
 const CardContainer = styled(Box)`
-  background-color: ${props => props.theme.colors.star};
+  background-color: ${(props) => props.theme.colors.star};
   width: 360px;
   min-width: 200px;
   min-height: 250px;
@@ -59,10 +59,10 @@ const TagContainer = styled.ul`
   margin 0;
   overflow: none;
   padding: 0;
-`
+`;
 
 const StyledHeader = styled(Header)`
-  color: ${props => props.theme.colors.jewel};
+  color: ${(props) => props.theme.colors.jewel};
   margin: 0.75em;
 `;
 
@@ -71,6 +71,11 @@ const StyledImg = styled(Image)`
     object-fit: cover;
     min-height: 300px;
     height: 15vw;
+    border-radius: 5px;
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+    border-bottom: 0.25em solid #ee6f87;
+    box-shadow: 0 0.1rem 0.1rem -1px #ee6f87;
   }
   &: hover {
     opacity: 0.6;
@@ -85,9 +90,9 @@ const Description = styled.p`
 const MenuButton = styled.button`
   padding: 1em;
   margin-top: 0;
-  background-color: ${props => props.theme.colors.color2};
+  background-color: ${(props) => props.theme.colors.color2};
   cursor: pointer;
-  color: ${props => props.theme.colors.stark};
+  color: ${(props) => props.theme.colors.stark};
   font-weight: 700;
   border: none
   border-top-left-radius: 25px;
@@ -133,7 +138,11 @@ const Card = (props: CardProps) => {
   return (
     <>
       <CardContainer className={props.className} mr={"1.5em"} mt={"3em"}>
-        <StyledImg src={props.img} sx={{ width: ["100%"], borderRadius: 5 }} onClick={props.imgAction} />
+        <StyledImg
+          src={props.img}
+          sx={{ width: ["100%"] }}
+          onClick={props.imgAction}
+        />
         <Flex justifyContent="space-between">
           <StyledHeader title={props.title} type={"h3"} />
           <ButtonContainer flexDirection={"row"}>
@@ -161,11 +170,8 @@ const Card = (props: CardProps) => {
           </Menu>
         )}
         <TagContainer>
-
           {props.tags?.map((t, k) => {
-            return (
-              <Tag key={k} text={t} />
-            )
+            return <Tag key={k} text={t} />;
           })}
         </TagContainer>
       </CardContainer>

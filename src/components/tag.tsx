@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 const TagLi = styled.li`
 background: ${props => props.theme.colors.color2};
-color: #e0e0e0;
+color: ${props => props.theme.colors.stark};
 height: 15px;
 display: inline-block;
 border-radius: 10%;
