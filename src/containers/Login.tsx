@@ -7,29 +7,29 @@ import Loader from "../components/loader";
 import { useGetAccessTokenMutation } from "../generated/graphql";
 import { setAccessToken } from "../accessToken";
 
-
 interface LoginProps {
-  history: History<LocationState>
+  history: History<LocationState>;
 }
 
 const Login = (props: LoginProps) => {
   const [getAccessToken] = useGetAccessTokenMutation();
-  const [error, setError] = useState(false)
+  const [error, setError] = useState(false);
   const q = new URLSearchParams(window.location.search);
   const code = q.get("code");
   useEffect(() => {
     const getToken = async () => {
-      console.log(code)
-      const tokenData = await getAccessToken({variables: {code: code as string}});
-    
-      if(tokenData.errors) {
-        setError(true)
+      console.log(code);
+      const tokenData = await getAccessToken({
+        variables: { code: code as string },
+      });
+
+      if (tokenData.errors) {
+        setError(true);
       }
-      if(tokenData.data?.getAccessToken){
+      if (tokenData.data?.getAccessToken) {
         setAccessToken(tokenData.data.getAccessToken.token);
-        props.history.push("/")
+        props.history.push("/");
       }
-      
     };
     getToken();
   }, []);
