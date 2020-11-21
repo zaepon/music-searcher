@@ -16,6 +16,7 @@ import {
   searchLastQuery,
 } from "../api/apUtils";
 import { debounce, DebounceHook } from "../utils/general";
+import { getAccessToken } from "../accessToken";
 
 const TopContainer = styled(Box)`
   text-align: center;
@@ -55,6 +56,7 @@ interface ImageProps {
 }
 
 const App = (props: AppProps) => {
+  const accessToken = getAccessToken();
   const [searchString, setSearchString] = useState("");
   const [artistName, setArtistName] = useState("");
   const [searchResult, setSearchResult] = useState([]);
@@ -201,17 +203,6 @@ const App = (props: AppProps) => {
                 />
               );
             })}
-        </Flex>
-        <Flex justifyContent="center">
-          {!loading && (
-            <LoginIndicator
-              url={`https://accounts.spotify.com/authorize?client_id=${
-                process.env.REACT_APP_CLIENT_ID
-              }&response_type=code&redirect_uri=${encodeURIComponent(
-                process.env.REACT_APP_LOGIN_CALLBACK_URL as string
-              )}&scope=user-read-private`}
-            />
-          )}
         </Flex>
       </Box>
     </>
