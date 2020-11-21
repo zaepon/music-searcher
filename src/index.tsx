@@ -1,59 +1,36 @@
-import React, {createContext, useState} from "react";
+import React from "react";
 import ReactDOM from "react-dom";
 import { createBrowserHistory } from "history";
-import Main from "./containers/Main";
-import Artist from './containers/Artist';
-
 import { ThemeProvider } from "styled-components";
 import { Theme, GlobalStyle } from "./theme";
-import { Route, Switch } from 'react-router-dom';
-import { HashRouter as Router, RouteComponentProps } from 'react-router-dom';
-
+import { ApolloProvider } from "@apollo/client";
+import { client } from "./apollo";
+import { App } from "./app";
 require("dotenv").config();
 
 
-interface RouteInfo {
-  id: string;
-}
-
-interface QueryInterface {
-  lastQuery: string;
-  setQuery: (url: string) => void;
-}
-
 
 interface HistoryProps {
-  history: any
+  history: any;
 }
+ 
 
-export const QueryContext = createContext({} as QueryInterface);
 
-const Root = (props: HistoryProps) =>{
-
-const [lastQuery, setLastQuery] = useState('');
-const setLastQueryStr = (url: string) => {
-    setLastQuery(url);
-}
-
- return(
+const Root = (props: HistoryProps) => {
+  return (
+    <ApolloProvider client={client}>
     <ThemeProvider theme={Theme}>
       <>
-        <Router>
-          <Switch>
-            <QueryContext.Provider value={{lastQuery: lastQuery, setQuery: setLastQueryStr}}>
-              <Route path='/artist/:id' render={({match, history}: RouteComponentProps<RouteInfo>) => (            
-                <Artist id={match.params.id} goBack={() => history.push('/')}/>
-              )}/>
-              <Route exact={true} path='/' component={Main} />
-            </QueryContext.Provider>
-          </Switch>
-        </Router>
+        <App />
         <GlobalStyle />
       </>
     </ThemeProvider>
+</ApolloProvider>
   );
-}
-
+};
 
 const customHistory = createBrowserHistory();
-ReactDOM.render(<Root  history={customHistory}/>, document.getElementById("root"));
+ReactDOM.render(
+  <Root history={customHistory} />,
+  document.getElementById("root")
+);
