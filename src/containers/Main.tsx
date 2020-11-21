@@ -8,7 +8,7 @@ import Card from "../components/card";
 import TextInput from "../components/textInput";
 import Loader from "../components/loader";
 import Topbar from "../components/topbar";
-import { QueryContext } from "../index";
+import { QueryContext } from "../routes";
 import LoginIndicator from "../components/loginIndicator";
 import {
   searchArtist,
@@ -62,7 +62,6 @@ const App = (props: AppProps) => {
   const [status, setStatus] = useState("");
   const [scrolled, setScrolled] = useState(false);
   const lastQ = useContext(QueryContext);
-
   useEffect(() => {
     const debounceRef = debounce(handleScroll, 200);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -204,9 +203,15 @@ const App = (props: AppProps) => {
             })}
         </Flex>
         <Flex justifyContent="center">
-          <LoginIndicator
-            url={`https://accounts.spotify.com/authorize?client_id=${process.env.REACT_APP_CLIENT_ID}&response_type=code&redirect_uri=https%3A%2F%2Fms.henril.com%2F&scope=user-read-private`}
-          />
+          {!loading && (
+            <LoginIndicator
+              url={`https://accounts.spotify.com/authorize?client_id=${
+                process.env.REACT_APP_CLIENT_ID
+              }&response_type=code&redirect_uri=${encodeURIComponent(
+                process.env.REACT_APP_LOGIN_CALLBACK_URL as string
+              )}&scope=user-read-private`}
+            />
+          )}
         </Flex>
       </Box>
     </>
