@@ -12,7 +12,7 @@ const StyledBar = styled(Flex)`
   right: 0;
   position:fixed;
   z-index: 9999;
-  background-color: ${props => props.theme.colors.dark}
+  background-color: ${props => props.theme.colors.navy};
   padding-bottom: 3.5em;
   padding-bottom: ${(props: topbarProps) => props.scrolled ? '.25em' : '2em'}
   padding-top: ${(props: topbarProps) => props.scrolled ? '0em' : '2em'}
@@ -26,7 +26,6 @@ const StyledBar = styled(Flex)`
     left: 0;
     right: 0;
     bottom: 0;
-    box-shadow: inset 0 0 2000px rgba(9, 32, 63, .5);
     filter: blur(10px);
     
   }

@@ -12,7 +12,9 @@ const Theme: DefaultTheme = {
     color4: '#66fcf1',
     light: '#fff',
     stark: 'rgb(238,111,135)',
-    color5: '#45a29e'
+    stark2: 'rgb(255, 64, 102)',
+    color5: '#45a29e',
+    navy: 'rgb(36,37,47)'
   },
 }
 

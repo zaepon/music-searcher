@@ -62,7 +62,7 @@ const TagContainer = styled.ul`
 `;
 
 const StyledHeader = styled(Header)`
-  color: ${(props) => props.theme.colors.jewel};
+  color: ${(props) => props.theme.colors.stark2};
   margin: 0.75em;
 `;
 

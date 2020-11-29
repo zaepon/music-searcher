@@ -12,7 +12,6 @@ const LoaderDiv = styled(Box)`
   border-top: 12px solid #EE6F87;
   border-radius: 50%;
   animation: ${spin} .7s linear infinite;
-  position: absolute;
   top: 50%;
 `;
 
