@@ -1,0 +1,20 @@
+query artistAlbums($artistId: String!, $offset: Float) {
+  artistAlbums(artistId: $artistId, offset: $offset) {
+    pages{
+      start
+      limit
+      total
+    }
+    albums {
+      albumGroup
+      albumType
+      availableMarkets
+      id
+      name
+      spotifyUri
+      externalSpotifyUrl
+      image
+    }
+  }
+  
+}

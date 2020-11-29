@@ -1,0 +1,10 @@
+query artistById($id: String!) {
+  artistById(id: $id) {
+    id
+    name
+    genres
+    image
+    href
+    spotifyUri
+  }
+}
