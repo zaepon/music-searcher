@@ -2,21 +2,18 @@ import React, { useState, useEffect, useContext } from "react";
 import styled, { withTheme } from "styled-components";
 import { Flex, Box } from "rebass";
 import { History, LocationState } from "history";
-
 import Header from "../components/header";
 import Card from "../components/card";
 import TextInput from "../components/textInput";
 import Loader from "../components/loader";
 import Topbar from "../components/topbar";
 import { QueryContext } from "../routes";
-import LoginIndicator from "../components/loginIndicator";
-import {
-  searchArtist,
-  getSimilarArtists,
-  searchLastQuery,
-} from "../api/apUtils";
 import { debounce, DebounceHook } from "../utils/general";
-import { getAccessToken } from "../accessToken";
+import {
+  Artist,
+  useArtistListByNameLazyQuery,
+  useSimilarArtistsLazyQuery,
+} from "../generated/graphql";
 
 const TopContainer = styled(Box)`
   text-align: center;
@@ -38,7 +35,7 @@ interface AppProps {
 
 interface ArtistProps {
   name?: string;
-  images?: ImageProps[];
+  image?: string;
   genres?: string[];
   popularity?: number;
   external_urls?: ExternalUrls;
@@ -56,24 +53,22 @@ interface ImageProps {
 }
 
 const App = (props: AppProps) => {
-  const accessToken = getAccessToken();
   const [searchString, setSearchString] = useState("");
   const [artistName, setArtistName] = useState("");
-  const [searchResult, setSearchResult] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [searchResult, setSearchResult] = useState([] as Artist[]);
   const [status, setStatus] = useState("");
+  const [loading, setLoading] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [resultType, setResultType] = useState("");
   const lastQ = useContext(QueryContext);
+  const [getArtistData, artistsByNameData] = useArtistListByNameLazyQuery();
+  const [
+    getSimilarArtists,
+    similarArtistResponse,
+  ] = useSimilarArtistsLazyQuery();
   useEffect(() => {
     const debounceRef = debounce(handleScroll, 200);
     window.scrollTo({ top: 0, behavior: "smooth" });
-    if (lastQ.lastQuery !== "") {
-      const fetchData = async () => {
-        const searchResult = await searchLastQuery(lastQ.lastQuery);
-        setSearchResult(searchResult);
-      };
-      fetchData();
-    }
     window.addEventListener("scroll", debounceRef, true);
     return () => {
       window.removeEventListener("scroll", debounceRef, true);
@@ -89,29 +84,39 @@ const App = (props: AppProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceSearch]);
 
+  useEffect(() => {
+    const { data, loading } = artistsByNameData;
+    setLoading(loading);
+    const d = data?.artistListByName.artists as Artist[];
+    setSearchResult(d);
+    setResultType("initial");
+  }, [artistsByNameData]);
+
+  useEffect(() => {
+    const state =
+      searchResult?.length > 0
+        ? setStatusMessage(searchResult, artistName, resultType)
+        : null;
+    if (state) setStatus(state);
+  }, [artistName, searchResult, resultType]);
+
+  useEffect(() => {
+    const { data, loading } = similarArtistResponse;
+    setLoading(loading);
+    const d = data?.similarArtists as Artist[];
+    setSearchResult(d);
+    setResultType("similar");
+  }, [similarArtistResponse]);
+
   const getArtistByName = async (name: string) => {
     setArtistName(name);
-    setLoading(true);
-    const searchResult = await searchArtist(name);
-    const state = setStatusMessage(searchResult.items, name, "initial");
-    setStatus(state);
-    setSearchResult(searchResult.items);
-    setLoading(false);
-    lastQ.setQuery(`https://api.spotify.com/v1/search?q=${name}&type=artist`);
+    props.history.replace(`${window.location.pathname}?name=${name}`)
+    getArtistData({ variables: { filter: { name } } });
   };
 
-  const findSimilarArtists = async (artist: ArtistProps) => {
-    const n = artist.name || "";
-    setLoading(true);
-    setArtistName(n);
-    const searchResult = await getSimilarArtists(artist.id || "");
-    const state = setStatusMessage(searchResult, n, "similar");
-    setStatus(state);
-    setSearchResult(searchResult);
-    setLoading(false);
-    lastQ.setQuery(
-      `https://api.spotify.com/v1/artists/${artist.id}/related-artists`
-    );
+  const findSimilarArtists = async (artist: Artist) => {
+    setArtistName(artist.name);
+    getSimilarArtists({ variables: { artistId: artist.id } });
   };
 
   const setStatusMessage = (results: object[], name: string, type: string) => {
@@ -142,7 +147,6 @@ const App = (props: AppProps) => {
 
   const handleScroll = () =>
     window.scrollY > 200 && !scrolled ? setScrolled(true) : setScrolled(false);
-
   return (
     <>
       <Box className="App">
@@ -156,7 +160,6 @@ const App = (props: AppProps) => {
             />
           </TopContainer>
         </Topbar>
-
         {!loading && artistName && (
           <TitleContainer mt={"15em"} width={"100%"}>
             <>
@@ -174,22 +177,16 @@ const App = (props: AppProps) => {
         >
           {loading && <Loader />}
           {!loading &&
-            searchResult.length > 0 &&
-            searchResult.map((artist: ArtistProps, index: number) => {
-              let imageObj = artist.images!.filter(
-                (img: ImageProps) => img.width === 640
-              );
-
-              if (!imageObj[0]) return null;
-
+            searchResult?.length > 0 &&
+            searchResult.map((artist: Artist) => {
+              if (!artist.image) return null;
               return (
                 <Card
                   key={artist.id}
                   title={artist.name}
-                  img={imageObj[0].url}
+                  img={artist.image as string}
                   imgAction={() => props.history.push(`/artist/${artist.id}`)}
                   tags={artist.genres}
-                  fillrate={artist.popularity}
                   menuItems={[
                     {
                       label: "Similar music",
