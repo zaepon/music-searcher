@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { withTheme } from "styled-components";
 import { Flex, Box } from "rebass";
 import { History, LocationState } from "history";
@@ -7,13 +7,13 @@ import Card from "../components/card";
 import TextInput from "../components/textInput";
 import Loader from "../components/loader";
 import Topbar from "../components/topbar";
-import { QueryContext } from "../routes";
 import { debounce, DebounceHook } from "../utils/general";
 import {
   Artist,
   useArtistListByNameLazyQuery,
   useSimilarArtistsLazyQuery,
 } from "../generated/graphql";
+import { useLocation } from "react-router";
 
 const TopContainer = styled(Box)`
   text-align: center;
@@ -60,12 +60,13 @@ const App = (props: AppProps) => {
   const [loading, setLoading] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [resultType, setResultType] = useState("");
-  const lastQ = useContext(QueryContext);
+  const location = useLocation();
   const [getArtistData, artistsByNameData] = useArtistListByNameLazyQuery();
   const [
     getSimilarArtists,
     similarArtistResponse,
   ] = useSimilarArtistsLazyQuery();
+
   useEffect(() => {
     const debounceRef = debounce(handleScroll, 200);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -74,7 +75,7 @@ const App = (props: AppProps) => {
       window.removeEventListener("scroll", debounceRef, true);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastQ.lastQuery]);
+  }, []);
 
   const debounceSearch = DebounceHook(searchString, 500);
   useEffect(() => {
@@ -83,6 +84,20 @@ const App = (props: AppProps) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debounceSearch]);
+
+  useEffect(() => {
+    const getUrlParameter = (name: string) => {
+      const results = location.search.split("=");
+      return results === undefined
+        ? ""
+        : decodeURIComponent(results[1]?.replace(/\+/g, " "));
+    };
+
+    const qparam = getUrlParameter("name");
+    setArtistName(qparam);
+    props.history.replace(`${window.location.pathname}?name=${qparam}`);
+    getArtistData({ variables: { filter: { name: qparam } } });
+  }, [props.history, location.search, getArtistData]);
 
   useEffect(() => {
     const { data, loading } = artistsByNameData;
@@ -110,7 +125,7 @@ const App = (props: AppProps) => {
 
   const getArtistByName = async (name: string) => {
     setArtistName(name);
-    props.history.replace(`${window.location.pathname}?name=${name}`)
+    props.history.replace(`${window.location.pathname}?name=${name}`);
     getArtistData({ variables: { filter: { name } } });
   };
 
