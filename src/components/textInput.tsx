@@ -6,10 +6,12 @@ const StyledTextInput = styled.input`
   width: 100%;
   height: 3rem;
   padding-left: 1em;
-  font-size: 1.2em;
-  border: 2px solid #564787;
-  border-radius: 8px;
-  color: #464b51;
+  font-size: 1.5em;
+  background-color: ${(props) => props.theme.colors.navy};
+  border: 0;
+  border-bottom: 0.15em solid ${(props) => props.theme.colors.stark};
+  color: ${(props) => props.theme.colors.stark2};
+  font-family: arial;
   &:focus {
     outline: none;
   }
@@ -22,7 +24,13 @@ interface TextInputProps {
   onKeyDown: (e: React.KeyboardEvent) => void;
 }
 
-
-const TextInput = (props: TextInputProps) => <StyledTextInput value={props.value} onKeyDown={props.onKeyDown} onChange={props.onChange} placeholder={props.placeholder}/>;
+const TextInput = (props: TextInputProps) => (
+  <StyledTextInput
+    value={props.value}
+    onKeyDown={props.onKeyDown}
+    onChange={props.onChange}
+    placeholder={props.placeholder}
+  />
+);
 
 export default TextInput;
