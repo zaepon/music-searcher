@@ -94,9 +94,12 @@ const App = (props: AppProps) => {
     };
 
     const qparam = getUrlParameter("name");
-    setArtistName(qparam);
-    props.history.replace(`${window.location.pathname}?name=${qparam}`);
-    getArtistData({ variables: { filter: { name: qparam } } });
+
+    if (qparam !== "undefined") {
+      setArtistName(qparam);
+      props.history.replace(`${window.location.pathname}?name=${qparam}`);
+      getArtistData({ variables: { filter: { name: qparam } } });
+    }
   }, [props.history, location.search, getArtistData]);
 
   useEffect(() => {
