@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { History, LocationState } from "history";
 import Topbar from "../components/topbar";
 import { Box, Flex } from "rebass";
 import { withTheme } from "styled-components";
 import Loader from "../components/loader";
 import { useGetAccessTokenMutation } from "../generated/graphql";
-import { setAccessToken } from "../accessToken";
+import { AuthContext } from "..";
 
 interface LoginProps {
   history: History<LocationState>;
@@ -14,6 +14,7 @@ interface LoginProps {
 const Login = (props: LoginProps) => {
   const [getAccessToken] = useGetAccessTokenMutation();
   const [error, setError] = useState(false);
+  const { setToken } = useContext(AuthContext);
   const q = new URLSearchParams(window.location.search);
   const code = q.get("code");
   useEffect(() => {
@@ -27,7 +28,7 @@ const Login = (props: LoginProps) => {
         setError(true);
       }
       if (tokenData.data?.getAccessToken) {
-        setAccessToken(tokenData.data.getAccessToken.token);
+        setToken(tokenData.data.getAccessToken.token);
         props.history.push("/");
       }
     };

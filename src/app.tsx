@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Flex } from "rebass";
 import { Routes } from "./routes";
 import Loader from "./components/loader";
-import { setAccessToken } from "./accessToken";
 import LoginIndicator from "./components/loginIndicator";
+import { AuthContext } from ".";
 
 export const App = () => {
-  const [loading, setLoading] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const { setToken } = useContext(AuthContext);
 
   useEffect(() => {
     fetch(`${process.env.REACT_APP_API_BASEURL}`, {
@@ -15,11 +15,12 @@ export const App = () => {
       credentials: "include",
     }).then(async (res) => {
       const d = await res.json();
-      setAccessToken(d.accesstoken);
-      setLoggedIn(true);
+      if (d.accessToken?.length > 0) {
+        setToken(d.accesstoken);
+      }
       setLoading(false);
     });
-  });
+  }, []);
 
   if (loading) {
     return (
@@ -30,18 +31,23 @@ export const App = () => {
   }
   return (
     <>
-      {" "}
       <Routes />{" "}
       <Flex justifyContent="center">
-        {!loading && !loggedIn && (
-          <LoginIndicator
-            url={`https://accounts.spotify.com/authorize?client_id=${
-              process.env.REACT_APP_CLIENT_ID
-            }&response_type=code&redirect_uri=${encodeURIComponent(
-              process.env.REACT_APP_LOGIN_CALLBACK_URL as string
-            )}&scope=user-read-private`}
-          />
-        )}
+        <AuthContext.Consumer>
+          {({ accessToken }) => (
+            <>
+              {accessToken?.length === 0 && (
+                <LoginIndicator
+                  url={`https://accounts.spotify.com/authorize?client_id=${
+                    process.env.REACT_APP_CLIENT_ID
+                  }&response_type=code&redirect_uri=${encodeURIComponent(
+                    process.env.REACT_APP_LOGIN_CALLBACK_URL as string
+                  )}&scope=user-read-private`}
+                />
+              )}
+            </>
+          )}
+        </AuthContext.Consumer>
       </Flex>
     </>
   );
