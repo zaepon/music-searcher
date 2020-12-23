@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Flex, Box, Image } from "rebass";
 
-import { searchArtistById, getArtistAlbums } from "../api/apUtils";
 import { debounce } from "../utils/general";
 
 import Topbar from "../components/topbar";
@@ -12,6 +11,12 @@ import ImageCard from "../components/imageCard";
 import Button from "../components/button";
 import Player from "../components/player";
 import TemplateImage from "../test.png";
+import {
+  Album,
+  SpotifyPagination,
+  useArtistAlbumsQuery,
+  useArtistByIdQuery,
+} from "../generated/graphql";
 
 interface ArtistProps {
   id: string;
@@ -44,29 +49,24 @@ const TopContainer = styled(Box)`
 `;
 
 const Artist = (props: ArtistProps) => {
-  const [artist, setArtist] = useState({ name: "", images: [{ url: "" }] });
-  const [albumsInfo, setAlbumsInfo] = useState({ total: 0 });
-  const [albums, setAlbums] = useState([]);
   const [selectedAlbumSrc, setSelectedAlbumSrc] = useState("");
-  const [loading, setLoading] = useState(false);
   const [playerVisible, setPlayerVisible] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [albums, setAlbums] = useState([] as Album[]);
+  const [pageInfo, setPageInfo] = useState({} as SpotifyPagination);
+
+  const albumsData = useArtistAlbumsQuery({
+    variables: { artistId: props.id, offset: 0 },
+    fetchPolicy: "network-only",
+  });
+  const artistData = useArtistByIdQuery({ variables: { id: props.id } });
+
+  const loading = artistData.loading || albumsData.loading;
+  const artist = artistData.data?.artistById;
+  const albumsResponse = albumsData.data?.artistAlbums;
 
   useEffect(() => {
     const debounceRef = debounce(handleScroll, 200);
-    const fetchData = async () => {
-
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      setLoading(true);
-      const artist = await searchArtistById(props.id);
-      setArtist(artist);
-      const albums = await getArtistAlbums(props.id);
-      setAlbumsInfo(albums);
-      setAlbums(albums.items);
-      setLoading(false);
-    };
-    fetchData();
-
     window.addEventListener("scroll", debounceRef, true);
     return () => {
       window.removeEventListener("scroll", debounceRef, true);
@@ -75,13 +75,23 @@ const Artist = (props: ArtistProps) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  useEffect(() => {
+    const pageI = albumsData.data?.artistAlbums.pages as SpotifyPagination;
+    const albumsArr = albumsData.data?.artistAlbums.albums as Album[];
+    setAlbums(albumsArr?.length ? [...albumsArr] : []);
+    setPageInfo(pageI);
+  }, [albumsData]);
+
   const handleScroll = () =>
     window.scrollY > 200 && !scrolled ? setScrolled(true) : setScrolled(false);
 
   const loadMoreAlbums = async () => {
-    const rAlbums = await getArtistAlbums(props.id, albums.length);
-    let newAlbumArr = albums.concat(rAlbums.items);
-    setAlbums(newAlbumArr);
+    const d = await albumsData.fetchMore({
+      variables: { artistId: props.id, offset: albumsResponse?.pages.limit },
+    });
+    const pageI = albumsData.data?.artistAlbums.pages as SpotifyPagination;
+    setAlbums([...albums, ...(d.data.artistAlbums.albums as Album[])]);
+    setPageInfo(pageI);
   };
 
   const ToggleMusicPlayer = (id: string) => {
@@ -89,7 +99,7 @@ const Artist = (props: ArtistProps) => {
     setSelectedAlbumSrc(`https://open.spotify.com/embed/album/${id}`);
     setPlayerVisible(true);
   };
-  
+
   return (
     <>
       <Topbar scrolled={scrolled}>
@@ -98,14 +108,10 @@ const Artist = (props: ArtistProps) => {
             <Image
               width={100}
               height={100}
-              src={
-                loading
-                  ? TemplateImage
-                  : artist.images[2] && artist.images[2].url
-              }
+              src={loading ? TemplateImage : (artist?.image as string)}
             />
             <Header
-              title={loading ? "...." : artist.name}
+              title={loading ? "...." : artist?.name}
               type={"h1"}
               color={"#CAE5FF"}
               style={{ marginLeft: "1em" }}
@@ -120,7 +126,6 @@ const Artist = (props: ArtistProps) => {
           </Button>
         </TopContainer>
       </Topbar>
-
       {playerVisible && (
         <Flex alignItems={"center"} justifyContent={"center"} mt={"15em"}>
           <Player src={selectedAlbumSrc} />
@@ -134,29 +139,32 @@ const Artist = (props: ArtistProps) => {
         mb={"3em"}
       >
         {loading && <Loader />}
-        {albums.length > 0 && (
-          <Flex width={"100%"} pb={"2em"} mt={"15em"} justifyContent={"center"}>
-
-          </Flex>
+        {albums && albums.length > 0 && (
+          <Flex
+            width={"100%"}
+            pb={"2em"}
+            mt={"15em"}
+            justifyContent={"center"}
+          ></Flex>
         )}
-        {albums.length > 0 &&
-          albums
-            .map((album: AlbumProps) => (
-              <ImageCard
-                key={album.id}
-                img={album.images[1].url}
-                onClick={() => ToggleMusicPlayer(album.id)}
-              />
-            ))}
+        {albums &&
+          albums.length > 0 &&
+          albums.map((album) => (
+            <ImageCard
+              key={album.id}
+              img={album.image as string}
+              onClick={() => ToggleMusicPlayer(album.id)}
+            />
+          ))}
       </Flex>
-      {albums.length < albumsInfo.total && (
+      {albums && albums.length < pageInfo?.total && (
         <Flex
           alignItems={"center"}
           justifyContent={"center"}
           mt={"2em"}
           mb={"4.5em"}
         >
-          <Button onClick={loadMoreAlbums}>Load more</Button>
+          <Button onClick={() => loadMoreAlbums()}>Load more</Button>
         </Flex>
       )}
     </>
