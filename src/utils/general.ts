@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 export const debounce = (cb: any, ms: number) => {
-  let timeout = 0;
+  let timeout = 0 as any;
 
   return function (this: any, ...args: []) {
     const callback = () => cb.apply(this, args);
