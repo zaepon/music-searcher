@@ -27,31 +27,9 @@ const Header = (props: HeaderProps) => {
   if (props.type === "h2")
     return <StyledH2 className={props.className}>{props.title}</StyledH2>;
   else if (props.type === "h3")
-    return (
-      <StyledH3
-        className={props.className}
-        style={{ color: `${props.color}`, ...props.style }}
-      >
-        {props.title}
-      </StyledH3>
-    );
+    return <StyledH3 className={props.className}>{props.title}</StyledH3>;
   else if (props.type === "h4")
-    return (
-      <StyledH4
-        className={props.className}
-        style={{ color: `${props.color}`, ...props.style }}
-      >
-        {props.title}
-      </StyledH4>
-    );
-  else
-    return (
-      <StyledH1
-        className={props.className}
-        style={{ color: `${props.color}`, ...props.style }}
-      >
-        {props.title}
-      </StyledH1>
-    );
+    return <StyledH4 className={props.className}>{props.title}</StyledH4>;
+  else return <StyledH1 className={props.className}>{props.title}</StyledH1>;
 };
 export default Header;

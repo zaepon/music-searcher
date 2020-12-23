@@ -1,6 +1,6 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 
-interface ToggleButtonProps   {
+interface ToggleButtonProps {
   isSelected?: boolean;
 }
 
@@ -9,15 +9,15 @@ const Button = styled.button<ToggleButtonProps>`
   height: 35px;
   font-size: .8rem;
   background-color: transparent;
-  border: ${props => props.disabled ? '0px' : 'none'};
-  border-bottom: 2px solid rgb(202, 229, 255);
+  border: ${(props) => (props.disabled ? "0px" : "none")};
+  border-bottom: ${(props) => props.theme.colors.stark2};
   
   border-radius: 1px;
   border-top-right-radius: 10px;
   border-top-left-radius: 10px;
   cursor: pointer;
-  color: ${props => props.disabled ? '#9fa1a2' : 'white'};
-  text-decoration: ${props => props.isSelected ? 'underline' : 'none'}
+  color: ${(props) => (props.disabled ? "#9fa1a2" : "white")};
+  text-decoration: ${(props) => (props.isSelected ? "underline" : "none")}
   font-weight: 700;
   &:hover {
     color: #7286a3;
@@ -36,7 +36,7 @@ const Button = styled.button<ToggleButtonProps>`
   -webkit-user-select: none;
   -o-user-select: none;
   user-select: none;
-`
+`;
 
 Button.displayName = "Button";
 
