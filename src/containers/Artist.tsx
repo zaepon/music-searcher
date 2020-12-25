@@ -16,7 +16,6 @@ import {
   useArtistAlbumsQuery,
   useArtistByIdQuery,
 } from "../generated/graphql";
-
 interface ArtistProps {
   id: string;
   goBack: () => void;
@@ -32,7 +31,6 @@ const Artist = (props: ArtistProps) => {
   const [scrolled, setScrolled] = useState(false);
   const [albums, setAlbums] = useState([] as Album[]);
   const [pageInfo, setPageInfo] = useState({} as SpotifyPagination);
-
   const albumsData = useArtistAlbumsQuery({
     variables: { artistId: props.id, offset: 0 },
     fetchPolicy: "network-only",
@@ -96,12 +94,6 @@ const Artist = (props: ArtistProps) => {
             />
           </Flex>
           <Box></Box>
-          <Button
-            style={{ position: "absolute", left: 0, top: 0, margin: "1em" }}
-            onClick={props.goBack}
-          >
-            Return
-          </Button>
         </TopContainer>
       </Topbar>
       {playerVisible && (
