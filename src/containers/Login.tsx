@@ -34,6 +34,7 @@ const Login = (props: LoginProps) => {
       }
     };
     getToken();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   return (
     <>
