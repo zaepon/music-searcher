@@ -9,8 +9,13 @@ export const App = () => {
   const [loading, setLoading] = useState(true);
   const { setToken } = useContext(AuthContext);
 
+  const apiRefreshUrl =
+    process.env.NODE_ENV === "development"
+      ? "http://localhost:4000/refresh_token"
+      : "https://api.henril.com/refresh_token";
+
   useEffect(() => {
-    fetch(`${process.env.REACT_APP_API_BASEURL}`, {
+    fetch(`${apiRefreshUrl}`, {
       method: "POST",
       credentials: "include",
     }).then(async (res) => {
@@ -38,10 +43,10 @@ export const App = () => {
             <>
               {accessToken?.length === 0 && (
                 <LoginIndicator
-                  url={`https://accounts.spotify.com/authorize?client_id=${
-                    process.env.REACT_APP_CLIENT_ID
-                  }&response_type=code&redirect_uri=${encodeURIComponent(
-                    process.env.REACT_APP_LOGIN_CALLBACK_URL as string
+                  url={`https://accounts.spotify.com/authorize?client_id=703964811f5f4213bdef5cf1f4850a63&response_type=code&redirect_uri=${encodeURIComponent(
+                    process.env.NODE_ENV === "development"
+                      ? "http://localhost:3000/login/"
+                      : ("https://ms.henril.com/login" as string)
                   )}&scope=user-read-private`}
                 />
               )}

@@ -8,7 +8,10 @@ import {
 import { getAccessToken } from "./accessToken";
 
 const httpLink = new HttpLink({
-  uri: `${process.env.REACT_APP_API_URL}`,
+  uri:
+    process.env.NODE_ENV === "development"
+      ? `http://localhost:4000`
+      : "https://api.henril.com/graphql",
   credentials: "include",
 });
 
