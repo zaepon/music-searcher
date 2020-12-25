@@ -33,25 +33,6 @@ interface AppProps {
   history: History<LocationState>;
 }
 
-interface ArtistProps {
-  name?: string;
-  image?: string;
-  genres?: string[];
-  popularity?: number;
-  external_urls?: ExternalUrls;
-  id?: string;
-}
-
-interface ExternalUrls {
-  spotify: string;
-}
-
-interface ImageProps {
-  height: number;
-  url: string;
-  width: number;
-}
-
 const App = (props: AppProps) => {
   const [searchString, setSearchString] = useState("");
   const [artistName, setArtistName] = useState("");

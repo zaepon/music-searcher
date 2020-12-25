@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { History, LocationState } from "history";
-import Topbar from "../components/topbar";
 import { Box, Flex } from "rebass";
 import { withTheme } from "styled-components";
+
+import Topbar from "../components/topbar";
 import Loader from "../components/loader";
 import { useGetAccessTokenMutation } from "../generated/graphql";
 import { AuthContext } from "..";

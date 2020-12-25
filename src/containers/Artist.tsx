@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { Flex, Box, Image } from "rebass";
 
 import { debounce } from "../utils/general";
-
 import Topbar from "../components/topbar";
 import Header from "../components/header";
 import Loader from "../components/loader";
@@ -21,27 +20,6 @@ import {
 interface ArtistProps {
   id: string;
   goBack: () => void;
-}
-
-interface AlbumProps {
-  album_group: string;
-  album_type: string;
-  artists: object[];
-  available_markets: [];
-  external_urls: { spotify: string };
-  href: string;
-  id: string;
-  images: ImageInterface[];
-  name: string;
-  release_date: string;
-  release_date_precision: string;
-  total_tracks: string;
-  type: string;
-  uri: string;
-}
-
-interface ImageInterface {
-  url: string;
 }
 
 const TopContainer = styled(Box)`
