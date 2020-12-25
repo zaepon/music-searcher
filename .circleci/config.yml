@@ -36,4 +36,4 @@ jobs:
       - run: docker login -u=$DOCKERHUB_USER -p=$DOCKERHUB_PASSWORD
       - run: export VERSION=$(node -p "require('./package.json').version") && docker push sakuru9/music-searcher-ui:$VERSION
       - run: docker push sakuru9/music-searcher-ui:latest
-      - run: ssh -o StrictHostKeyChecking=no $SSH_USER@henril.com  -t "cd service-files; git pull; cd music-searcher; docker login; docker pull sakuru9/music-searcher-ui:latest; docker-compose -f music-searcher-ui.yml up -d"
+      - run: ssh -o StrictHostKeyChecking=no $SSH_USER@henril.com  -t "cd service-files; git pull; cd music-searcher-ui; docker login; docker pull sakuru9/music-searcher-ui:latest; docker-compose -f music-searcher-ui.yml up -d"

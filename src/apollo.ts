@@ -10,7 +10,7 @@ import { getAccessToken } from "./accessToken";
 const httpLink = new HttpLink({
   uri:
     process.env.NODE_ENV === "development"
-      ? `http://localhost:4000`
+      ? `http://localhost:4000/graphql`
       : "https://api.henril.com/graphql",
   credentials: "include",
 });
