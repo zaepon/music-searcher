@@ -99,7 +99,7 @@ const MenuButton = styled.button`
   border-bottom-left-radius: 25px;
 
   &:hover {
-    background-color: #fff;
+    background-color: ${(props) => props.theme.colors.stark};
     color: #3d597f;
     transition: 0.15s;
   }
