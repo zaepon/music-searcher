@@ -1,30 +1,26 @@
-# Javascript Node CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-javascript/ for more details
-#
 version: 2
 jobs:
   build:
+    filters:
+      branches:
+        only:
+          - main
     docker:
-      # specify the version you desire here
-      - image: circleci/node:10.18
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/mongo:3.4.4
+      - image: circleci/node:latest
 
     working_directory: ~/repo
 
     steps:
+      - setup_remote_docker:
+          version: 19.03.13
+
       - checkout
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+      - add_ssh_keys:
+          fingerprints:
+            - "cb:85:5a:0d:8b:a1:34:9c:ce:7d:b8:ed:8d:6b:49:32"
+
+      - run: echo $DOCKERHUB_USER $DOCKERHUB_PASSWORD $CLIENT_ID_SECRET
 
       - run: yarn install
 
@@ -32,3 +28,12 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
+
+      - run: yarn build
+
+      - run: export VERSION=$(node -p "require('./package.json').version") && docker build -t sakuru9/music-searcher-ui:latest -t sakuru9/music-searcher-ui:$VERSION .
+
+      - run: docker login -u=$DOCKERHUB_USER -p=$DOCKERHUB_PASSWORD
+      - run: export VERSION=$(node -p "require('./package.json').version") && docker push sakuru9/music-searcher-ui:$VERSION
+      - run: docker push sakuru9/music-searcher-ui:latest
+      - run: ssh -o StrictHostKeyChecking=no $SSH_USER@henril.com  -t "cd service-files; git pull; cd music-searcher; docker login; docker pull sakuru9/music-searcher-ui:latest; docker-compose -f music-searcher-ui.yml up -d"
