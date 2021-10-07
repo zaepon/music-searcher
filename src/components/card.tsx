@@ -50,7 +50,7 @@ const CardContainer = styled(Box)`
   transition: 0.25s ease-in-out;
   &:hover {
     transform: scale(1.05);
-    transition: 0.25s ease-in-out;
+    transition: 0.1s ease-in-out;
   }
 `;
 
@@ -137,7 +137,7 @@ interface MenuItem {
 const Card = (props: CardProps) => {
   return (
     <>
-      <CardContainer className={props.className} mr={"1.5em"} mt={"3em"}>
+      <CardContainer className={props.className} p={"1em"} mt={"3em"} sx={{marginRight: ["0em", "2em"]}}>
         <StyledImg
           src={props.img}
           sx={{ width: ["100%"] }}

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import styled, { withTheme } from "styled-components";
 import { Flex, Box } from "rebass";
 import { History, LocationState } from "history";
-import Header from "../components/header";
 import Card from "../components/card";
 import TextInput from "../components/textInput";
 import Loader from "../components/loader";
@@ -20,10 +19,6 @@ const TopContainer = styled(Box)`
   position: relative;
 `;
 
-const TitleContainer = styled(Box)`
-  text-align: center;
-`;
-
 interface AppProps {
   getSimilarArtists: (id: string) => object;
   getArtist: (name: string) => object;
@@ -35,12 +30,9 @@ interface AppProps {
 
 const App = (props: AppProps) => {
   const [searchString, setSearchString] = useState("");
-  const [artistName, setArtistName] = useState("");
   const [searchResult, setSearchResult] = useState([] as Artist[]);
-  const [status, setStatus] = useState("");
   const [loading, setLoading] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const [resultType, setResultType] = useState("");
   const location = useLocation();
   const [getArtistData, artistsByNameData] = useArtistListByNameLazyQuery();
   const [
@@ -77,7 +69,6 @@ const App = (props: AppProps) => {
     const qparam = getUrlParameter("name");
 
     if (qparam !== "undefined") {
-      setArtistName(qparam);
       props.history.replace(`${window.location.pathname}?name=${qparam}`);
       getArtistData({ variables: { filter: { name: qparam } } });
     }
@@ -88,54 +79,23 @@ const App = (props: AppProps) => {
     setLoading(loading);
     const d = data?.artistListByName.artists as Artist[];
     setSearchResult(d);
-    setResultType("initial");
   }, [artistsByNameData]);
 
-  useEffect(() => {
-    const state =
-      searchResult?.length > 0
-        ? setStatusMessage(searchResult, artistName, resultType)
-        : null;
-    if (state) setStatus(state);
-  }, [artistName, searchResult, resultType]);
 
   useEffect(() => {
     const { data, loading } = similarArtistResponse;
     setLoading(loading);
     const d = data?.similarArtists as Artist[];
     setSearchResult(d);
-    setResultType("similar");
   }, [similarArtistResponse]);
 
   const getArtistByName = async (name: string) => {
-    setArtistName(name);
     props.history.replace(`${window.location.pathname}?name=${name}`);
     getArtistData({ variables: { filter: { name } } });
   };
 
   const findSimilarArtists = async (artist: Artist) => {
-    setArtistName(artist.name);
     getSimilarArtists({ variables: { artistId: artist.id } });
-  };
-
-  const setStatusMessage = (results: object[], name: string, type: string) => {
-    switch (type) {
-      case "initial":
-        if (results.length === 0)
-          return `found 0 artists or bands with name "${name}`;
-        if (results.length > 0)
-          return `Found one or multiple bands with name "${name}". Select one.`;
-        return "";
-
-      case "similar":
-        if (results.length === 0)
-          return `No similar bands or artists to "${name}"`;
-        if (results.length > 0)
-          return `Displaying similar artists & bands to "${name}"`;
-        return "";
-      default:
-        return "";
-    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -159,14 +119,6 @@ const App = (props: AppProps) => {
             />
           </TopContainer>
         </Topbar>
-        {!loading && artistName && (
-          <TitleContainer mt={"15em"} width={"100%"}>
-            <>
-              <Header title={status} type={"h1"} />
-            </>
-          </TitleContainer>
-        )}
-
         <Flex
           width={"100%"}
           justifyContent={"center"}
@@ -190,7 +142,6 @@ const App = (props: AppProps) => {
                     {
                       label: "Similar music",
                       action: () => {
-                        setArtistName(artist.name || "");
                         findSimilarArtists(artist);
                         window.scrollTo({ top: 0, behavior: "smooth" });
                       },

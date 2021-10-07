@@ -40,7 +40,4 @@ const Root = (props: HistoryProps) => {
 };
 
 const customHistory = createBrowserHistory();
-ReactDOM.render(
-  <Root history={customHistory} />,
-  document.getElementById("root")
-);
+ReactDOM.render(<Root history={customHistory} />, document.getElementById("root"));

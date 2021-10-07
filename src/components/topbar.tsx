@@ -13,9 +13,8 @@ const StyledBar = styled(Flex)`
   position:fixed;
   z-index: 9999;
   background-color: ${props => props.theme.colors.navy};
-  padding-bottom: 3.5em;
-  padding-bottom: ${(props: topbarProps) => props.scrolled ? '.25em' : '2em'}
-  padding-top: ${(props: topbarProps) => props.scrolled ? '0em' : '2em'}
+  padding-bottom: ${(props: topbarProps) => props.scrolled ? '.25em' : '1em'}
+  padding-top: ${(props: topbarProps) => props.scrolled ? '0em' : '1em'}
   transition: .2s;
   min-height: 50px;
 
