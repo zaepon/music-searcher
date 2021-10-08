@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import ReactDOM from "react-dom";
 import { createBrowserHistory } from "history";
 import { ThemeProvider } from "styled-components";
@@ -6,6 +6,7 @@ import { Theme, GlobalStyle } from "./theme";
 import { ApolloProvider } from "@apollo/client";
 import { client } from "./apollo";
 import { App } from "./app";
+import {setAccessToken } from "./accessToken"; 
 require("dotenv").config();
 
 interface HistoryProps {
@@ -13,20 +14,27 @@ interface HistoryProps {
 }
 
 export const AuthContext = createContext({
-  accessToken: "",
-  setToken: (s: string) => {},
+  isLogged: false,
+  setToken: (s: string) => {
+    setAccessToken(s)
+  },
 });
 
+
 const Root = (props: HistoryProps) => {
-  const [accessToken, setAccessToken] = useState("");
+  const { setToken } = useContext(AuthContext);
+  const [isLogged, setIsLogged] = useState(false)
 
   return (
     <ApolloProvider client={client}>
       <ThemeProvider theme={Theme}>
         <AuthContext.Provider
           value={{
-            accessToken: accessToken,
-            setToken: (s) => setAccessToken(s),
+            isLogged,
+            setToken: (s) => {
+              setIsLogged(true);
+              setToken(s);
+            }
           }}
         >
           <>
