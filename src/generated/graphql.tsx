@@ -1,9 +1,10 @@
-import { gql } from "@apollo/client";
-import * as Apollo from "@apollo/client";
+import { gql } from '@apollo/client';
+import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
-export type Exact<T extends { [key: string]: unknown }> = {
-  [K in keyof T]: T[K];
-};
+export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
+const defaultOptions =  {}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -13,190 +14,154 @@ export type Scalars = {
   Float: number;
 };
 
-export type Query = {
-  __typename?: "Query";
-  artistListByName: ArtistsResponse;
-  similarArtists: Array<Artist>;
-  artistById: Artist;
-  artistAlbums: AlbumResponse;
+export type Album = {
+  __typename?: 'Album';
+  albumGroup: Scalars['String'];
+  albumType: Scalars['String'];
+  availableMarkets: Array<Scalars['String']>;
+  externalSpotifyUrl: Scalars['String'];
+  href: Scalars['String'];
+  id: Scalars['String'];
+  image?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  releaseDate: Scalars['String'];
+  spotifyUri: Scalars['String'];
+  trackCount: Scalars['Float'];
+  type: Scalars['String'];
 };
+
+export type AlbumResponse = {
+  __typename?: 'AlbumResponse';
+  albums: Array<Album>;
+  pages: SpotifyPagination;
+};
+
+export type Artist = {
+  __typename?: 'Artist';
+  genres: Array<Scalars['String']>;
+  href?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  image?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  spotifyUri: Scalars['String'];
+};
+
+export type ArtistSearchFilter = {
+  limit?: Maybe<Scalars['Float']>;
+  name: Scalars['String'];
+  start?: Maybe<Scalars['Float']>;
+};
+
+export type ArtistsResponse = {
+  __typename?: 'ArtistsResponse';
+  artists: Array<Artist>;
+  pages: SpotifyPagination;
+};
+
+export type AuthResponse = {
+  __typename?: 'AuthResponse';
+  expires: Scalars['Float'];
+  token: Scalars['String'];
+};
+
+export type Mutation = {
+  __typename?: 'Mutation';
+  getAccessToken: AuthResponse;
+};
+
+
+export type MutationGetAccessTokenArgs = {
+  code: Scalars['String'];
+};
+
+export type Query = {
+  __typename?: 'Query';
+  artistAlbums: AlbumResponse;
+  artistById: Artist;
+  artistListByName: ArtistsResponse;
+  artistRecommendations: ArtistsResponse;
+  similarArtists: Array<Artist>;
+};
+
+
+export type QueryArtistAlbumsArgs = {
+  artistId: Scalars['String'];
+  offset?: Maybe<Scalars['Float']>;
+};
+
+
+export type QueryArtistByIdArgs = {
+  id: Scalars['String'];
+};
+
 
 export type QueryArtistListByNameArgs = {
   filter: ArtistSearchFilter;
 };
 
+
 export type QuerySimilarArtistsArgs = {
-  artistId: Scalars["String"];
-};
-
-export type QueryArtistByIdArgs = {
-  id: Scalars["String"];
-};
-
-export type QueryArtistAlbumsArgs = {
-  offset?: Maybe<Scalars["Float"]>;
-  artistId: Scalars["String"];
-};
-
-export type ArtistsResponse = {
-  __typename?: "ArtistsResponse";
-  pages: SpotifyPagination;
-  artists: Array<Artist>;
+  artistId: Scalars['String'];
 };
 
 export type SpotifyPagination = {
-  __typename?: "SpotifyPagination";
-  start: Scalars["Float"];
-  limit: Scalars["Float"];
-  total: Scalars["Float"];
-};
-
-export type Artist = {
-  __typename?: "Artist";
-  genres: Array<Scalars["String"]>;
-  href?: Maybe<Scalars["String"]>;
-  id: Scalars["String"];
-  image?: Maybe<Scalars["String"]>;
-  name: Scalars["String"];
-  spotifyUri: Scalars["String"];
-};
-
-export type ArtistSearchFilter = {
-  name: Scalars["String"];
-  start?: Maybe<Scalars["Float"]>;
-  limit?: Maybe<Scalars["Float"]>;
-};
-
-export type AlbumResponse = {
-  __typename?: "AlbumResponse";
-  pages: SpotifyPagination;
-  albums: Array<Album>;
-};
-
-export type Album = {
-  __typename?: "Album";
-  albumGroup: Scalars["String"];
-  albumType: Scalars["String"];
-  availableMarkets: Array<Scalars["String"]>;
-  externalSpotifyUrl: Scalars["String"];
-  href: Scalars["String"];
-  id: Scalars["String"];
-  image?: Maybe<Scalars["String"]>;
-  name: Scalars["String"];
-  releaseDate: Scalars["String"];
-  trackCount: Scalars["Float"];
-  type: Scalars["String"];
-  spotifyUri: Scalars["String"];
-};
-
-export type Mutation = {
-  __typename?: "Mutation";
-  getAccessToken: AuthResponse;
-};
-
-export type MutationGetAccessTokenArgs = {
-  code: Scalars["String"];
-};
-
-export type AuthResponse = {
-  __typename?: "AuthResponse";
-  token: Scalars["String"];
-  expires: Scalars["Float"];
+  __typename?: 'SpotifyPagination';
+  limit: Scalars['Float'];
+  start: Scalars['Float'];
+  total: Scalars['Float'];
 };
 
 export type GetAccessTokenMutationVariables = Exact<{
-  code: Scalars["String"];
+  code: Scalars['String'];
 }>;
 
-export type GetAccessTokenMutation = { __typename?: "Mutation" } & {
-  getAccessToken: { __typename?: "AuthResponse" } & Pick<
-    AuthResponse,
-    "token" | "expires"
-  >;
-};
+
+export type GetAccessTokenMutation = { __typename?: 'Mutation', getAccessToken: { __typename?: 'AuthResponse', token: string, expires: number } };
 
 export type ArtistAlbumsQueryVariables = Exact<{
-  artistId: Scalars["String"];
-  offset?: Maybe<Scalars["Float"]>;
+  artistId: Scalars['String'];
+  offset?: Maybe<Scalars['Float']>;
 }>;
 
-export type ArtistAlbumsQuery = { __typename?: "Query" } & {
-  artistAlbums: { __typename?: "AlbumResponse" } & {
-    pages: { __typename?: "SpotifyPagination" } & Pick<
-      SpotifyPagination,
-      "start" | "limit" | "total"
-    >;
-    albums: Array<
-      { __typename?: "Album" } & Pick<
-        Album,
-        | "albumGroup"
-        | "albumType"
-        | "availableMarkets"
-        | "id"
-        | "name"
-        | "spotifyUri"
-        | "externalSpotifyUrl"
-        | "image"
-      >
-    >;
-  };
-};
+
+export type ArtistAlbumsQuery = { __typename?: 'Query', artistAlbums: { __typename?: 'AlbumResponse', pages: { __typename?: 'SpotifyPagination', start: number, limit: number, total: number }, albums: Array<{ __typename?: 'Album', albumGroup: string, albumType: string, availableMarkets: Array<string>, id: string, name: string, spotifyUri: string, externalSpotifyUrl: string, image?: string | null | undefined }> } };
 
 export type ArtistByIdQueryVariables = Exact<{
-  id: Scalars["String"];
+  id: Scalars['String'];
 }>;
 
-export type ArtistByIdQuery = { __typename?: "Query" } & {
-  artistById: { __typename?: "Artist" } & Pick<
-    Artist,
-    "id" | "name" | "genres" | "image" | "href" | "spotifyUri"
-  >;
-};
+
+export type ArtistByIdQuery = { __typename?: 'Query', artistById: { __typename?: 'Artist', id: string, name: string, genres: Array<string>, image?: string | null | undefined, href?: string | null | undefined, spotifyUri: string } };
 
 export type ArtistListByNameQueryVariables = Exact<{
   filter: ArtistSearchFilter;
 }>;
 
-export type ArtistListByNameQuery = { __typename?: "Query" } & {
-  artistListByName: { __typename?: "ArtistsResponse" } & {
-    pages: { __typename?: "SpotifyPagination" } & Pick<
-      SpotifyPagination,
-      "start" | "limit" | "total"
-    >;
-    artists: Array<
-      { __typename?: "Artist" } & Pick<
-        Artist,
-        "id" | "name" | "genres" | "image" | "href" | "spotifyUri"
-      >
-    >;
-  };
-};
+
+export type ArtistListByNameQuery = { __typename?: 'Query', artistListByName: { __typename?: 'ArtistsResponse', pages: { __typename?: 'SpotifyPagination', start: number, limit: number, total: number }, artists: Array<{ __typename?: 'Artist', id: string, name: string, genres: Array<string>, image?: string | null | undefined, href?: string | null | undefined, spotifyUri: string }> } };
+
+export type ArtistRecommendationsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ArtistRecommendationsQuery = { __typename?: 'Query', artistRecommendations: { __typename: 'ArtistsResponse', artists: Array<{ __typename: 'Artist', id: string, name: string, genres: Array<string>, image?: string | null | undefined, href?: string | null | undefined, spotifyUri: string }> } };
 
 export type SimilarArtistsQueryVariables = Exact<{
-  artistId: Scalars["String"];
+  artistId: Scalars['String'];
 }>;
 
-export type SimilarArtistsQuery = { __typename?: "Query" } & {
-  similarArtists: Array<
-    { __typename?: "Artist" } & Pick<
-      Artist,
-      "id" | "name" | "genres" | "image" | "href" | "spotifyUri"
-    >
-  >;
-};
+
+export type SimilarArtistsQuery = { __typename?: 'Query', similarArtists: Array<{ __typename?: 'Artist', id: string, name: string, genres: Array<string>, image?: string | null | undefined, href?: string | null | undefined, spotifyUri: string }> };
+
 
 export const GetAccessTokenDocument = gql`
-  mutation getAccessToken($code: String!) {
-    getAccessToken(code: $code) {
-      token
-      expires
-    }
+    mutation getAccessToken($code: String!) {
+  getAccessToken(code: $code) {
+    token
+    expires
   }
-`;
-export type GetAccessTokenMutationFn = Apollo.MutationFunction<
-  GetAccessTokenMutation,
-  GetAccessTokenMutationVariables
->;
+}
+    `;
+export type GetAccessTokenMutationFn = Apollo.MutationFunction<GetAccessTokenMutation, GetAccessTokenMutationVariables>;
 
 /**
  * __useGetAccessTokenMutation__
@@ -215,46 +180,34 @@ export type GetAccessTokenMutationFn = Apollo.MutationFunction<
  *   },
  * });
  */
-export function useGetAccessTokenMutation(
-  baseOptions?: Apollo.MutationHookOptions<
-    GetAccessTokenMutation,
-    GetAccessTokenMutationVariables
-  >
-) {
-  return Apollo.useMutation<
-    GetAccessTokenMutation,
-    GetAccessTokenMutationVariables
-  >(GetAccessTokenDocument, baseOptions);
-}
-export type GetAccessTokenMutationHookResult = ReturnType<
-  typeof useGetAccessTokenMutation
->;
+export function useGetAccessTokenMutation(baseOptions?: Apollo.MutationHookOptions<GetAccessTokenMutation, GetAccessTokenMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GetAccessTokenMutation, GetAccessTokenMutationVariables>(GetAccessTokenDocument, options);
+      }
+export type GetAccessTokenMutationHookResult = ReturnType<typeof useGetAccessTokenMutation>;
 export type GetAccessTokenMutationResult = Apollo.MutationResult<GetAccessTokenMutation>;
-export type GetAccessTokenMutationOptions = Apollo.BaseMutationOptions<
-  GetAccessTokenMutation,
-  GetAccessTokenMutationVariables
->;
+export type GetAccessTokenMutationOptions = Apollo.BaseMutationOptions<GetAccessTokenMutation, GetAccessTokenMutationVariables>;
 export const ArtistAlbumsDocument = gql`
-  query artistAlbums($artistId: String!, $offset: Float) {
-    artistAlbums(artistId: $artistId, offset: $offset) {
-      pages {
-        start
-        limit
-        total
-      }
-      albums {
-        albumGroup
-        albumType
-        availableMarkets
-        id
-        name
-        spotifyUri
-        externalSpotifyUrl
-        image
-      }
+    query artistAlbums($artistId: String!, $offset: Float) {
+  artistAlbums(artistId: $artistId, offset: $offset) {
+    pages {
+      start
+      limit
+      total
+    }
+    albums {
+      albumGroup
+      albumType
+      availableMarkets
+      id
+      name
+      spotifyUri
+      externalSpotifyUrl
+      image
     }
   }
-`;
+}
+    `;
 
 /**
  * __useArtistAlbumsQuery__
@@ -273,50 +226,29 @@ export const ArtistAlbumsDocument = gql`
  *   },
  * });
  */
-export function useArtistAlbumsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    ArtistAlbumsQuery,
-    ArtistAlbumsQueryVariables
-  >
-) {
-  return Apollo.useQuery<ArtistAlbumsQuery, ArtistAlbumsQueryVariables>(
-    ArtistAlbumsDocument,
-    baseOptions
-  );
-}
-export function useArtistAlbumsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ArtistAlbumsQuery,
-    ArtistAlbumsQueryVariables
-  >
-) {
-  return Apollo.useLazyQuery<ArtistAlbumsQuery, ArtistAlbumsQueryVariables>(
-    ArtistAlbumsDocument,
-    baseOptions
-  );
-}
-export type ArtistAlbumsQueryHookResult = ReturnType<
-  typeof useArtistAlbumsQuery
->;
-export type ArtistAlbumsLazyQueryHookResult = ReturnType<
-  typeof useArtistAlbumsLazyQuery
->;
-export type ArtistAlbumsQueryResult = Apollo.QueryResult<
-  ArtistAlbumsQuery,
-  ArtistAlbumsQueryVariables
->;
+export function useArtistAlbumsQuery(baseOptions: Apollo.QueryHookOptions<ArtistAlbumsQuery, ArtistAlbumsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ArtistAlbumsQuery, ArtistAlbumsQueryVariables>(ArtistAlbumsDocument, options);
+      }
+export function useArtistAlbumsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ArtistAlbumsQuery, ArtistAlbumsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ArtistAlbumsQuery, ArtistAlbumsQueryVariables>(ArtistAlbumsDocument, options);
+        }
+export type ArtistAlbumsQueryHookResult = ReturnType<typeof useArtistAlbumsQuery>;
+export type ArtistAlbumsLazyQueryHookResult = ReturnType<typeof useArtistAlbumsLazyQuery>;
+export type ArtistAlbumsQueryResult = Apollo.QueryResult<ArtistAlbumsQuery, ArtistAlbumsQueryVariables>;
 export const ArtistByIdDocument = gql`
-  query artistById($id: String!) {
-    artistById(id: $id) {
-      id
-      name
-      genres
-      image
-      href
-      spotifyUri
-    }
+    query artistById($id: String!) {
+  artistById(id: $id) {
+    id
+    name
+    genres
+    image
+    href
+    spotifyUri
   }
-`;
+}
+    `;
 
 /**
  * __useArtistByIdQuery__
@@ -334,55 +266,36 @@ export const ArtistByIdDocument = gql`
  *   },
  * });
  */
-export function useArtistByIdQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    ArtistByIdQuery,
-    ArtistByIdQueryVariables
-  >
-) {
-  return Apollo.useQuery<ArtistByIdQuery, ArtistByIdQueryVariables>(
-    ArtistByIdDocument,
-    baseOptions
-  );
-}
-export function useArtistByIdLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ArtistByIdQuery,
-    ArtistByIdQueryVariables
-  >
-) {
-  return Apollo.useLazyQuery<ArtistByIdQuery, ArtistByIdQueryVariables>(
-    ArtistByIdDocument,
-    baseOptions
-  );
-}
+export function useArtistByIdQuery(baseOptions: Apollo.QueryHookOptions<ArtistByIdQuery, ArtistByIdQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ArtistByIdQuery, ArtistByIdQueryVariables>(ArtistByIdDocument, options);
+      }
+export function useArtistByIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ArtistByIdQuery, ArtistByIdQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ArtistByIdQuery, ArtistByIdQueryVariables>(ArtistByIdDocument, options);
+        }
 export type ArtistByIdQueryHookResult = ReturnType<typeof useArtistByIdQuery>;
-export type ArtistByIdLazyQueryHookResult = ReturnType<
-  typeof useArtistByIdLazyQuery
->;
-export type ArtistByIdQueryResult = Apollo.QueryResult<
-  ArtistByIdQuery,
-  ArtistByIdQueryVariables
->;
+export type ArtistByIdLazyQueryHookResult = ReturnType<typeof useArtistByIdLazyQuery>;
+export type ArtistByIdQueryResult = Apollo.QueryResult<ArtistByIdQuery, ArtistByIdQueryVariables>;
 export const ArtistListByNameDocument = gql`
-  query artistListByName($filter: ArtistSearchFilter!) {
-    artistListByName(filter: $filter) {
-      pages {
-        start
-        limit
-        total
-      }
-      artists {
-        id
-        name
-        genres
-        image
-        href
-        spotifyUri
-      }
+    query artistListByName($filter: ArtistSearchFilter!) {
+  artistListByName(filter: $filter) {
+    pages {
+      start
+      limit
+      total
+    }
+    artists {
+      id
+      name
+      genres
+      image
+      href
+      spotifyUri
     }
   }
-`;
+}
+    `;
 
 /**
  * __useArtistListByNameQuery__
@@ -400,50 +313,72 @@ export const ArtistListByNameDocument = gql`
  *   },
  * });
  */
-export function useArtistListByNameQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    ArtistListByNameQuery,
-    ArtistListByNameQueryVariables
-  >
-) {
-  return Apollo.useQuery<ArtistListByNameQuery, ArtistListByNameQueryVariables>(
-    ArtistListByNameDocument,
-    baseOptions
-  );
-}
-export function useArtistListByNameLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    ArtistListByNameQuery,
-    ArtistListByNameQueryVariables
-  >
-) {
-  return Apollo.useLazyQuery<
-    ArtistListByNameQuery,
-    ArtistListByNameQueryVariables
-  >(ArtistListByNameDocument, baseOptions);
-}
-export type ArtistListByNameQueryHookResult = ReturnType<
-  typeof useArtistListByNameQuery
->;
-export type ArtistListByNameLazyQueryHookResult = ReturnType<
-  typeof useArtistListByNameLazyQuery
->;
-export type ArtistListByNameQueryResult = Apollo.QueryResult<
-  ArtistListByNameQuery,
-  ArtistListByNameQueryVariables
->;
-export const SimilarArtistsDocument = gql`
-  query similarArtists($artistId: String!) {
-    similarArtists(artistId: $artistId) {
+export function useArtistListByNameQuery(baseOptions: Apollo.QueryHookOptions<ArtistListByNameQuery, ArtistListByNameQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ArtistListByNameQuery, ArtistListByNameQueryVariables>(ArtistListByNameDocument, options);
+      }
+export function useArtistListByNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ArtistListByNameQuery, ArtistListByNameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ArtistListByNameQuery, ArtistListByNameQueryVariables>(ArtistListByNameDocument, options);
+        }
+export type ArtistListByNameQueryHookResult = ReturnType<typeof useArtistListByNameQuery>;
+export type ArtistListByNameLazyQueryHookResult = ReturnType<typeof useArtistListByNameLazyQuery>;
+export type ArtistListByNameQueryResult = Apollo.QueryResult<ArtistListByNameQuery, ArtistListByNameQueryVariables>;
+export const ArtistRecommendationsDocument = gql`
+    query artistRecommendations {
+  artistRecommendations {
+    artists {
       id
       name
       genres
       image
       href
       spotifyUri
+      __typename
     }
+    __typename
   }
-`;
+}
+    `;
+
+/**
+ * __useArtistRecommendationsQuery__
+ *
+ * To run a query within a React component, call `useArtistRecommendationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useArtistRecommendationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useArtistRecommendationsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useArtistRecommendationsQuery(baseOptions?: Apollo.QueryHookOptions<ArtistRecommendationsQuery, ArtistRecommendationsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<ArtistRecommendationsQuery, ArtistRecommendationsQueryVariables>(ArtistRecommendationsDocument, options);
+      }
+export function useArtistRecommendationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ArtistRecommendationsQuery, ArtistRecommendationsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<ArtistRecommendationsQuery, ArtistRecommendationsQueryVariables>(ArtistRecommendationsDocument, options);
+        }
+export type ArtistRecommendationsQueryHookResult = ReturnType<typeof useArtistRecommendationsQuery>;
+export type ArtistRecommendationsLazyQueryHookResult = ReturnType<typeof useArtistRecommendationsLazyQuery>;
+export type ArtistRecommendationsQueryResult = Apollo.QueryResult<ArtistRecommendationsQuery, ArtistRecommendationsQueryVariables>;
+export const SimilarArtistsDocument = gql`
+    query similarArtists($artistId: String!) {
+  similarArtists(artistId: $artistId) {
+    id
+    name
+    genres
+    image
+    href
+    spotifyUri
+  }
+}
+    `;
 
 /**
  * __useSimilarArtistsQuery__
@@ -461,35 +396,14 @@ export const SimilarArtistsDocument = gql`
  *   },
  * });
  */
-export function useSimilarArtistsQuery(
-  baseOptions: Apollo.QueryHookOptions<
-    SimilarArtistsQuery,
-    SimilarArtistsQueryVariables
-  >
-) {
-  return Apollo.useQuery<SimilarArtistsQuery, SimilarArtistsQueryVariables>(
-    SimilarArtistsDocument,
-    baseOptions
-  );
-}
-export function useSimilarArtistsLazyQuery(
-  baseOptions?: Apollo.LazyQueryHookOptions<
-    SimilarArtistsQuery,
-    SimilarArtistsQueryVariables
-  >
-) {
-  return Apollo.useLazyQuery<SimilarArtistsQuery, SimilarArtistsQueryVariables>(
-    SimilarArtistsDocument,
-    baseOptions
-  );
-}
-export type SimilarArtistsQueryHookResult = ReturnType<
-  typeof useSimilarArtistsQuery
->;
-export type SimilarArtistsLazyQueryHookResult = ReturnType<
-  typeof useSimilarArtistsLazyQuery
->;
-export type SimilarArtistsQueryResult = Apollo.QueryResult<
-  SimilarArtistsQuery,
-  SimilarArtistsQueryVariables
->;
+export function useSimilarArtistsQuery(baseOptions: Apollo.QueryHookOptions<SimilarArtistsQuery, SimilarArtistsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<SimilarArtistsQuery, SimilarArtistsQueryVariables>(SimilarArtistsDocument, options);
+      }
+export function useSimilarArtistsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<SimilarArtistsQuery, SimilarArtistsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<SimilarArtistsQuery, SimilarArtistsQueryVariables>(SimilarArtistsDocument, options);
+        }
+export type SimilarArtistsQueryHookResult = ReturnType<typeof useSimilarArtistsQuery>;
+export type SimilarArtistsLazyQueryHookResult = ReturnType<typeof useSimilarArtistsLazyQuery>;
+export type SimilarArtistsQueryResult = Apollo.QueryResult<SimilarArtistsQuery, SimilarArtistsQueryVariables>;

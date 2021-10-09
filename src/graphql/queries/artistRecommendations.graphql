@@ -1,0 +1,14 @@
+query artistRecommendations {
+  artistRecommendations {
+    artists {
+      id
+      name
+      genres
+      image
+      href
+      spotifyUri
+      __typename
+    }
+    __typename
+  }
+}
