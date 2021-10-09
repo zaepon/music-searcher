@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Flex, Box, Image } from "rebass";
+import { Flex, Box } from "rebass";
 
 import { debounce } from "../utils/general";
 import Topbar from "../components/topbar";
@@ -16,6 +16,7 @@ import {
   useArtistAlbumsQuery,
   useArtistByIdQuery,
 } from "../generated/graphql";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 interface ArtistProps {
   id: string;
   goBack: () => void;
@@ -81,10 +82,10 @@ const Artist = (props: ArtistProps) => {
       <Topbar scrolled={scrolled}>
         <TopContainer pt={"1em"} width={"100%"} m={"auto"}>
           <Flex alignItems={"center"} justifyContent={"center"}>
-            <Image
+            <LazyLoadImage
               width={100}
               height={100}
-              src={loading ? TemplateImage : (artist?.image as string)}
+              src={artist?.image || TemplateImage}
             />
             <Header
               title={loading ? "...." : artist?.name}

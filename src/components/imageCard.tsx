@@ -1,8 +1,9 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { Box, Image } from "rebass"; 
+import { Box } from "rebass";
 
-import playButton from './play-button.svg';
+import playButton from "./play-button.svg";
+import { LazyLoadImage } from "react-lazy-load-image-component";
 
 const fadeIn = keyframes`
   from {
@@ -20,45 +21,45 @@ const StyledIcon = styled(Box)`
   height: 50%;
   top: 25%;
   left: 25%;
-  transition: .5s;
-  cursor: pointer;  
-`;
-
-const StyledImg = styled(Image)`
-  min-height: 231px;
+  transition: 0.5s;
+  cursor: pointer;
 `;
 
 const ImgContainer = styled(Box)`
   position: relative;
   animation: ${fadeIn} 1s linear;
-  transition: .25s ease-in-out;
+  transition: 0.25s ease-in-out;
 
   &:hover {
     opacity: 0.8;
     transform: scale(1.05);
-    transition: .25s ease-in-out;
+    transition: 0.25s ease-in-out;
   }
-    
+
   &:hover ${StyledIcon} {
     opacity: 1;
     background-image: url(${playButton});
     background-repeat: no-repeat;
   }
-`
+`;
 
 interface ImageCardProps {
   img: string;
   onClick: () => void;
 }
 
-
 const ImageCard = (props: ImageCardProps) => {
   return (
-    <ImgContainer mt={'1em'} mr={'2em'} >
-      <StyledImg sx={{width:['250px'], borderRadius:10}} src={props.img} />
+    <ImgContainer mt={"1em"} mr={"2em"}>
+      <LazyLoadImage
+        width="250px"
+        style={{ borderRadius: 10 }}
+        src={props.img}
+        effect="blur"
+      />
       <StyledIcon onClick={props.onClick}></StyledIcon>
     </ImgContainer>
-  )
-}
+  );
+};
 
 export default ImageCard;

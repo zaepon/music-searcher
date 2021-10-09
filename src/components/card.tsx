@@ -1,8 +1,10 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { Box, Flex, Image } from "rebass";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import { Box, Flex } from "rebass";
 import Header from "./header";
 import Tag from "./tag";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const fadeIn = keyframes`
   from {
@@ -66,22 +68,6 @@ const StyledHeader = styled(Header)`
   margin: 0.75em;
 `;
 
-const StyledImg = styled(Image)`
-  && {
-    object-fit: cover;
-    min-height: 300px;
-    height: 15vw;
-    border-radius: 5px;
-    border-bottom-right-radius: 0px;
-    border-bottom-left-radius: 0px;
-    border-bottom: 0.25em solid #ee6f87;
-    box-shadow: 0 0.1rem 0.1rem -1px #ee6f87;
-  }
-  &: hover {
-    opacity: 0.6;
-  }
-`;
-
 const Description = styled.p`
   margin: 1em;
   font-size: 0.85em;
@@ -137,12 +123,20 @@ interface MenuItem {
 const Card = (props: CardProps) => {
   return (
     <>
-      <CardContainer className={props.className} p={"1em"} mt={"3em"} sx={{marginRight: ["0em", "2em"]}}>
-        <StyledImg
+      <CardContainer
+        className={props.className}
+        p={"1em"}
+        mt={"3em"}
+        sx={{ marginRight: ["0em", "2em"] }}
+      >
+        <LazyLoadImage
           src={props.img}
-          sx={{ width: ["100%"] }}
+          width="100%"
+          style={{ minHeight: "300px" }}
+          effect="blur"
           onClick={props.imgAction}
         />
+
         <Flex justifyContent="space-between">
           <StyledHeader title={props.title} type={"h3"} />
           <ButtonContainer flexDirection={"row"}>
