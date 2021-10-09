@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled, { withTheme } from "styled-components";
 import { Flex, Box } from "rebass";
 import { History, LocationState } from "history";
@@ -10,9 +10,12 @@ import { debounce, DebounceHook } from "../utils/general";
 import {
   Artist,
   useArtistListByNameLazyQuery,
+  useArtistRecommendationsLazyQuery,
   useSimilarArtistsLazyQuery,
 } from "../generated/graphql";
 import { useLocation } from "react-router";
+import Header from "../components/header";
+import { AuthContext } from "..";
 
 const TopContainer = styled(Box)`
   text-align: center;
@@ -31,15 +34,19 @@ interface AppProps {
 const App = (props: AppProps) => {
   const [searchString, setSearchString] = useState("");
   const [searchResult, setSearchResult] = useState([] as Artist[]);
+  const [artistRecommendations, setArtistRecommendations] = useState(
+    [] as Artist[],
+  );
   const [loading, setLoading] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const [getArtistData, artistsByNameData] = useArtistListByNameLazyQuery();
-  const [
-    getSimilarArtists,
-    similarArtistResponse,
-  ] = useSimilarArtistsLazyQuery();
+  const [getSimilarArtists, similarArtistResponse] =
+    useSimilarArtistsLazyQuery();
+  const [getRecommendations, recommendations] =
+    useArtistRecommendationsLazyQuery();
 
+  const { isLogged } = useContext(AuthContext);
   useEffect(() => {
     const debounceRef = debounce(handleScroll, 200);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -72,7 +79,17 @@ const App = (props: AppProps) => {
       props.history.replace(`${window.location.pathname}?name=${qparam}`);
       getArtistData({ variables: { filter: { name: qparam } } });
     }
-  }, [props.history, location.search, getArtistData]);
+
+    if (isLogged) {
+      getRecommendations();
+    }
+  }, [
+    props.history,
+    location.search,
+    getArtistData,
+    getRecommendations,
+    isLogged,
+  ]);
 
   useEffect(() => {
     const { data, loading } = artistsByNameData;
@@ -81,6 +98,12 @@ const App = (props: AppProps) => {
     setSearchResult(d);
   }, [artistsByNameData]);
 
+  useEffect(() => {
+    const { data, loading } = recommendations;
+    setLoading(loading);
+    const d = data?.artistRecommendations.artists as Artist[];
+    setArtistRecommendations(d);
+  }, [recommendations]);
 
   useEffect(() => {
     const { data, loading } = similarArtistResponse;
@@ -151,6 +174,47 @@ const App = (props: AppProps) => {
               );
             })}
         </Flex>
+        {isLogged && (
+          <Box mt={"15em"}>
+            <Flex justifyContent="center">
+              <Header color="red" title="You may like some of these" />
+            </Flex>
+            {!loading && (
+              <Flex
+                width={"100%"}
+                justifyContent={"center"}
+                mb={"3%"}
+                flexWrap={"wrap"}
+              >
+                {artistRecommendations?.length &&
+                  artistRecommendations.map((artist) => {
+                    if (!artist.image) return null;
+
+                    return (
+                      <Card
+                        key={artist.id}
+                        title={artist.name}
+                        img={artist.image as string}
+                        imgAction={() =>
+                          props.history.push(`/artist/${artist.id}`)
+                        }
+                        tags={artist.genres}
+                        menuItems={[
+                          {
+                            label: "Similar music",
+                            action: () => {
+                              findSimilarArtists(artist);
+                              window.scrollTo({ top: 0, behavior: "smooth" });
+                            },
+                          },
+                        ]}
+                      />
+                    );
+                  })}
+              </Flex>
+            )}
+          </Box>
+        )}
       </Box>
     </>
   );
