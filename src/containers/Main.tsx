@@ -140,7 +140,7 @@ const App = (props: AppProps) => {
   return (
     <>
       <Box className="App">
-        <Topbar scrolled={scrolled}>
+        <Topbar scrolled={scrolled} logoLink={() => props.history.push("/")}>
           <TopContainer width={"100%"}>
             <TextInput
               onKeyDown={handleKeyDown}
@@ -182,7 +182,7 @@ const App = (props: AppProps) => {
               );
             })}
         </Flex>
-        {isLogged && (
+        {isLogged && !loading && artistRecommendations?.length && (
           <Box mt={"15em"}>
             <Flex justifyContent="center">
               <Header color="red" title="You may like some of these" />
@@ -194,31 +194,30 @@ const App = (props: AppProps) => {
                 mb={"3%"}
                 flexWrap={"wrap"}
               >
-                {artistRecommendations?.length &&
-                  artistRecommendations.map((artist) => {
-                    if (!artist.image) return null;
+                {artistRecommendations.map((artist) => {
+                  if (!artist.image) return null;
 
-                    return (
-                      <Card
-                        key={artist.id}
-                        title={artist.name}
-                        img={artist.image as string}
-                        imgAction={() =>
-                          props.history.push(`/artist/${artist.id}`)
-                        }
-                        tags={artist.genres}
-                        menuItems={[
-                          {
-                            label: "Similar music",
-                            action: () => {
-                              findSimilarArtists(artist);
-                              window.scrollTo({ top: 0, behavior: "auto" });
-                            },
+                  return (
+                    <Card
+                      key={artist.id}
+                      title={artist.name}
+                      img={artist.image as string}
+                      imgAction={() =>
+                        props.history.push(`/artist/${artist.id}`)
+                      }
+                      tags={artist.genres}
+                      menuItems={[
+                        {
+                          label: "Similar music",
+                          action: () => {
+                            findSimilarArtists(artist);
+                            window.scrollTo({ top: 0, behavior: "auto" });
                           },
-                        ]}
-                      />
-                    );
-                  })}
+                        },
+                      ]}
+                    />
+                  );
+                })}
               </Flex>
             )}
           </Box>

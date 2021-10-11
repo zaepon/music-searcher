@@ -34,7 +34,11 @@ export const Routes: React.FC = () => {
           <Route
             path="/artist/:id"
             render={({ match, history }: RouteComponentProps<RouteInfo>) => (
-              <Artist id={match.params.id} goBack={() => history.push("/")} />
+              <Artist
+                history={history}
+                id={match.params.id}
+                goBack={() => history.push("/")}
+              />
             )}
           />
           <Route exact={true} path="/login/" component={Login} />

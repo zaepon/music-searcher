@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Flex, Box } from "rebass";
 
+import { History, LocationState } from "history";
 import { debounce } from "../utils/general";
 import Topbar from "../components/topbar";
 import Header from "../components/header";
@@ -20,6 +21,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 interface ArtistProps {
   id: string;
   goBack: () => void;
+  history: History<LocationState>;
 }
 
 const TopContainer = styled(Box)`
@@ -79,7 +81,7 @@ const Artist = (props: ArtistProps) => {
 
   return (
     <>
-      <Topbar scrolled={scrolled}>
+      <Topbar scrolled={scrolled} logoLink={() => props.history.push("/")}>
         <TopContainer pt={"1em"} width={"100%"} m={"auto"}>
           <Flex alignItems={"center"} justifyContent={"center"}>
             <LazyLoadImage
