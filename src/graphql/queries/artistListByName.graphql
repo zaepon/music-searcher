@@ -1,6 +1,10 @@
-query artistListByName($filter: ArtistSearchFilter!){
+query artistListByName($filter: ArtistSearchFilter!) {
   artistListByName(filter: $filter) {
-    pages {start, limit, total}
+    pages {
+      start
+      limit
+      total
+    }
     artists {
       id
       name

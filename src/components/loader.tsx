@@ -8,15 +8,13 @@ const spin = keyframes`
 `;
 
 const LoaderDiv = styled(Box)`
-  border: 12px solid rgb(36,37,47);
-  border-top: 12px solid #EE6F87;
+  border: 12px solid rgb(36, 37, 47);
+  border-top: 12px solid #ee6f87;
   border-radius: 50%;
-  animation: ${spin} .7s linear infinite;
+  animation: ${spin} 0.7s linear infinite;
   top: 50%;
 `;
 
-const Loader = () => (
-  <LoaderDiv width={'75px'} height={'75px'} />
-);
+const Loader = () => <LoaderDiv width={"75px"} height={"75px"} />;
 
 export default Loader;

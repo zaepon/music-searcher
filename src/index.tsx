@@ -6,7 +6,7 @@ import { Theme, GlobalStyle } from "./theme";
 import { ApolloProvider } from "@apollo/client";
 import { client } from "./apollo";
 import { App } from "./app";
-import {setAccessToken } from "./accessToken"; 
+import { setAccessToken } from "./accessToken";
 require("dotenv").config();
 
 interface HistoryProps {
@@ -16,14 +16,13 @@ interface HistoryProps {
 export const AuthContext = createContext({
   isLogged: false,
   setToken: (s: string) => {
-    setAccessToken(s)
+    setAccessToken(s);
   },
 });
 
-
 const Root = (props: HistoryProps) => {
   const { setToken } = useContext(AuthContext);
-  const [isLogged, setIsLogged] = useState(false)
+  const [isLogged, setIsLogged] = useState(false);
 
   return (
     <ApolloProvider client={client}>
@@ -34,7 +33,7 @@ const Root = (props: HistoryProps) => {
             setToken: (s) => {
               setIsLogged(true);
               setToken(s);
-            }
+            },
           }}
         >
           <>
@@ -48,4 +47,7 @@ const Root = (props: HistoryProps) => {
 };
 
 const customHistory = createBrowserHistory();
-ReactDOM.render(<Root history={customHistory} />, document.getElementById("root"));
+ReactDOM.render(
+  <Root history={customHistory} />,
+  document.getElementById("root"),
+);

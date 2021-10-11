@@ -13,13 +13,27 @@ interface LoginIndicatorProps {
 }
 const LoginIndicator = (props: LoginIndicatorProps) => {
   return (
-    <Flex flexDirection="column" justifyContent="center" alignItems="center" marginRight={"1"} marginLeft={"1"} style={{textAlign: "center"}}>
+    <Flex
+      flexDirection="column"
+      justifyContent="center"
+      alignItems="center"
+      marginRight={"1"}
+      marginLeft={"1"}
+      style={{ textAlign: "center" }}
+    >
       <StyledA href={props.url}>
-      <Image  sx={{
-    width: [ '50%', '50%' ],
-    borderRadius: 8,
-  }} src={SpotifyLogo} alt="spotify-logo" />
-        <Header type={"h3"} title="Login to spotify to get personalized music recommendations" />
+        <Image
+          sx={{
+            width: ["50%", "50%"],
+            borderRadius: 8,
+          }}
+          src={SpotifyLogo}
+          alt="spotify-logo"
+        />
+        <Header
+          type={"h3"}
+          title="Login to spotify to get personalized music recommendations"
+        />
       </StyledA>
     </Flex>
   );

@@ -47,7 +47,7 @@ export const App = () => {
                   url={`https://accounts.spotify.com/authorize?client_id=703964811f5f4213bdef5cf1f4850a63&response_type=code&redirect_uri=${encodeURIComponent(
                     process.env.NODE_ENV === "development"
                       ? "http://localhost:3000/login/"
-                      : "https://ms.henril.com/login"
+                      : "https://ms.henril.com/login",
                   )}&scope=user-read-private user-read-recently-played`}
                 />
               )}

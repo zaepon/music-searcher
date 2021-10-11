@@ -1,10 +1,10 @@
-query similarArtists($artistId: String!){
+query similarArtists($artistId: String!) {
   similarArtists(artistId: $artistId) {
-        id
-      name
-      genres
-      image
-      href
-      spotifyUri
+    id
+    name
+    genres
+    image
+    href
+    spotifyUri
   }
 }

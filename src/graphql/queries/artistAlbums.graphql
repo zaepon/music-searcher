@@ -1,6 +1,6 @@
 query artistAlbums($artistId: String!, $offset: Float) {
   artistAlbums(artistId: $artistId, offset: $offset) {
-    pages{
+    pages {
       start
       limit
       total
@@ -16,5 +16,4 @@ query artistAlbums($artistId: String!, $offset: Float) {
       image
     }
   }
-  
 }

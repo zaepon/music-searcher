@@ -29,9 +29,7 @@ interface ActionObject {
 const getKeyValues = (arr: Array<object>, propKey: string) => {
   const reducer = (newArr: string[], curr: any) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    newArr.includes(curr[propKey])
-      ? "null"
-      : newArr.push(curr[propKey]);
+    newArr.includes(curr[propKey]) ? "null" : newArr.push(curr[propKey]);
     return newArr;
   };
   return arr.reduce<string[]>(reducer, []);
@@ -39,7 +37,7 @@ const getKeyValues = (arr: Array<object>, propKey: string) => {
 
 const sortActionsToKeyValues = (
   keyValues: Array<string>,
-  actions: Array<ActionObject>
+  actions: Array<ActionObject>,
 ) => {
   let rdc = (newArr: Array<ActionObject>, curr: ActionObject) => {
     if (keyValues.includes(curr.keyValue)) newArr.push(curr);
@@ -51,16 +49,22 @@ const sortActionsToKeyValues = (
 const GroupedButtons = (props: GroupedButtonsProps) => {
   sortActionsToKeyValues(
     getKeyValues(props.data, props.propertyKey),
-    props.actions
+    props.actions,
   );
   return (
     <>
       <Flex flexWrap={"wrap"}>
         {sortActionsToKeyValues(
           getKeyValues(props.data, props.propertyKey),
-          props.actions
+          props.actions,
         ).map((b, i) => (
-          <TextButton isSelected={props.selected === b.keyValue} onClick={b.onClick} key={i}>{b.keyValue}</TextButton>
+          <TextButton
+            isSelected={props.selected === b.keyValue}
+            onClick={b.onClick}
+            key={i}
+          >
+            {b.keyValue}
+          </TextButton>
         ))}
       </Flex>
     </>
