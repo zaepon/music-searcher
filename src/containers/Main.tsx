@@ -174,7 +174,7 @@ const App = (props: AppProps) => {
                       label: "Similar music",
                       action: () => {
                         findSimilarArtists(artist);
-                        window.scrollTo({ top: 0, behavior: "smooth" });
+                        window.scrollTo({ top: 0, behavior: "auto" });
                       },
                     },
                   ]}
@@ -212,7 +212,7 @@ const App = (props: AppProps) => {
                             label: "Similar music",
                             action: () => {
                               findSimilarArtists(artist);
-                              window.scrollTo({ top: 0, behavior: "smooth" });
+                              window.scrollTo({ top: 0, behavior: "auto" });
                             },
                           },
                         ]}
