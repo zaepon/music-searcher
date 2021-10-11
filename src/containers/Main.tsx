@@ -67,17 +67,21 @@ const App = (props: AppProps) => {
 
   useEffect(() => {
     const getUrlParameter = (name: string) => {
-      const results = location.search.split("=");
+      const results = location.search.split(`${name}=`);
       return results === undefined
         ? ""
         : decodeURIComponent(results[1]?.replace(/\+/g, " "));
     };
 
     const qparam = getUrlParameter("name");
+    const artistId = getUrlParameter("similarArtistsById");
 
     if (qparam !== "undefined") {
-      props.history.replace(`${window.location.pathname}?name=${qparam}`);
       getArtistData({ variables: { filter: { name: qparam } } });
+    }
+
+    if (artistId !== undefined) {
+      getSimilarArtists({ variables: { artistId: artistId } });
     }
 
     if (isLogged) {
@@ -88,6 +92,7 @@ const App = (props: AppProps) => {
     location.search,
     getArtistData,
     getRecommendations,
+    getSimilarArtists,
     isLogged,
   ]);
 
@@ -118,6 +123,9 @@ const App = (props: AppProps) => {
   };
 
   const findSimilarArtists = async (artist: Artist) => {
+    props.history.replace(
+      `${window.location.pathname}?similarArtistsById=${artist.id}`,
+    );
     getSimilarArtists({ variables: { artistId: artist.id } });
   };
 
