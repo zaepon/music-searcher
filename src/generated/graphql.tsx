@@ -67,6 +67,7 @@ export type AuthResponse = {
 export type Mutation = {
   __typename?: 'Mutation';
   getAccessToken: AuthResponse;
+  logout: Scalars['Boolean'];
 };
 
 
@@ -81,6 +82,7 @@ export type Query = {
   artistListByName: ArtistsResponse;
   artistRecommendations: ArtistsResponse;
   similarArtists: Array<Artist>;
+  user: User;
 };
 
 
@@ -109,6 +111,13 @@ export type SpotifyPagination = {
   limit: Scalars['Float'];
   start: Scalars['Float'];
   total: Scalars['Float'];
+};
+
+export type User = {
+  __typename?: 'User';
+  id: Scalars['String'];
+  imageUrl?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
 };
 
 export type GetAccessTokenMutationVariables = Exact<{
@@ -145,12 +154,22 @@ export type ArtistRecommendationsQueryVariables = Exact<{ [key: string]: never; 
 
 export type ArtistRecommendationsQuery = { __typename?: 'Query', artistRecommendations: { __typename: 'ArtistsResponse', artists: Array<{ __typename: 'Artist', id: string, name: string, genres: Array<string>, image?: string | null | undefined, href?: string | null | undefined, spotifyUri: string }> } };
 
+export type LogoutMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type LogoutMutation = { __typename?: 'Mutation', logout: boolean };
+
 export type SimilarArtistsQueryVariables = Exact<{
   artistId: Scalars['String'];
 }>;
 
 
 export type SimilarArtistsQuery = { __typename?: 'Query', similarArtists: Array<{ __typename?: 'Artist', id: string, name: string, genres: Array<string>, image?: string | null | undefined, href?: string | null | undefined, spotifyUri: string }> };
+
+export type UserQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } };
 
 
 export const GetAccessTokenDocument = gql`
@@ -367,6 +386,36 @@ export function useArtistRecommendationsLazyQuery(baseOptions?: Apollo.LazyQuery
 export type ArtistRecommendationsQueryHookResult = ReturnType<typeof useArtistRecommendationsQuery>;
 export type ArtistRecommendationsLazyQueryHookResult = ReturnType<typeof useArtistRecommendationsLazyQuery>;
 export type ArtistRecommendationsQueryResult = Apollo.QueryResult<ArtistRecommendationsQuery, ArtistRecommendationsQueryVariables>;
+export const LogoutDocument = gql`
+    mutation logout {
+  logout
+}
+    `;
+export type LogoutMutationFn = Apollo.MutationFunction<LogoutMutation, LogoutMutationVariables>;
+
+/**
+ * __useLogoutMutation__
+ *
+ * To run a mutation, you first call `useLogoutMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLogoutMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [logoutMutation, { data, loading, error }] = useLogoutMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useLogoutMutation(baseOptions?: Apollo.MutationHookOptions<LogoutMutation, LogoutMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LogoutMutation, LogoutMutationVariables>(LogoutDocument, options);
+      }
+export type LogoutMutationHookResult = ReturnType<typeof useLogoutMutation>;
+export type LogoutMutationResult = Apollo.MutationResult<LogoutMutation>;
+export type LogoutMutationOptions = Apollo.BaseMutationOptions<LogoutMutation, LogoutMutationVariables>;
 export const SimilarArtistsDocument = gql`
     query similarArtists($artistId: String!) {
   similarArtists(artistId: $artistId) {
@@ -407,3 +456,39 @@ export function useSimilarArtistsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpt
 export type SimilarArtistsQueryHookResult = ReturnType<typeof useSimilarArtistsQuery>;
 export type SimilarArtistsLazyQueryHookResult = ReturnType<typeof useSimilarArtistsLazyQuery>;
 export type SimilarArtistsQueryResult = Apollo.QueryResult<SimilarArtistsQuery, SimilarArtistsQueryVariables>;
+export const UserDocument = gql`
+    query user {
+  user {
+    id
+    name
+    imageUrl
+  }
+}
+    `;
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useUserQuery(baseOptions?: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+      }
+export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+        }
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
