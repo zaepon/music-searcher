@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { useEffect, createContext, useContext, useState } from "react";
 import ReactDOM from "react-dom";
 import { createBrowserHistory } from "history";
 import { ThemeProvider } from "styled-components";
@@ -14,6 +14,7 @@ interface HistoryProps {
 }
 
 export const AuthContext = createContext({
+  logoutUser: () => {},
   isLogged: false,
   setToken: (s: string) => {
     setAccessToken(s);
@@ -30,6 +31,7 @@ const Root = (props: HistoryProps) => {
         <AuthContext.Provider
           value={{
             isLogged,
+            logoutUser: () => setIsLogged(false),
             setToken: (s) => {
               setIsLogged(true);
               setToken(s);

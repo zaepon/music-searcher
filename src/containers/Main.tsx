@@ -6,12 +6,14 @@ import Card from "../components/card";
 import TextInput from "../components/textInput";
 import Loader from "../components/loader";
 import Topbar from "../components/topbar";
+import Button from "../components/button";
 import { debounce, DebounceHook } from "../utils/general";
 import {
   Artist,
   useArtistListByNameLazyQuery,
   useArtistRecommendationsLazyQuery,
   useSimilarArtistsLazyQuery,
+  useLogoutMutation,
 } from "../generated/graphql";
 import { useLocation } from "react-router";
 import Header from "../components/header";
@@ -32,6 +34,7 @@ interface AppProps {
 }
 
 const App = (props: AppProps) => {
+  const [logoutMutation] = useLogoutMutation();
   const [searchString, setSearchString] = useState("");
   const [searchResult, setSearchResult] = useState([] as Artist[]);
   const [artistRecommendations, setArtistRecommendations] = useState(
@@ -46,7 +49,7 @@ const App = (props: AppProps) => {
   const [getRecommendations, recommendations] =
     useArtistRecommendationsLazyQuery();
 
-  const { isLogged } = useContext(AuthContext);
+  const { isLogged, logoutUser } = useContext(AuthContext);
   useEffect(() => {
     const debounceRef = debounce(handleScroll, 200);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -135,6 +138,11 @@ const App = (props: AppProps) => {
     }
   };
 
+  const logout = () => {
+    logoutMutation();
+    logoutUser();
+  };
+
   const handleScroll = () =>
     window.scrollY > 200 && !scrolled ? setScrolled(true) : setScrolled(false);
   return (
@@ -149,6 +157,7 @@ const App = (props: AppProps) => {
               placeholder={"Search for artist or band.."}
             />
           </TopContainer>
+          {isLogged && <Button onClick={() => logout()}>Logout</Button>}
         </Topbar>
         <Flex
           width={"100%"}

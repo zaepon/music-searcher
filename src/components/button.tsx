@@ -8,6 +8,7 @@ const Button = styled.button<ToggleButtonProps>`
   width: 100px;
   height: 35px;
   font-size: .8rem;
+  z-index: 1000;
   background-color: transparent;
   border: ${(props) => (props.disabled ? "0px" : "none")};
   border-bottom: ${(props) => props.theme.colors.stark2};
