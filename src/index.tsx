@@ -1,4 +1,4 @@
-import React, { useEffect, createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState } from "react";
 import ReactDOM from "react-dom";
 import { createBrowserHistory } from "history";
 import { ThemeProvider } from "styled-components";
@@ -21,7 +21,7 @@ export const AuthContext = createContext({
   },
 });
 
-const Root = (props: HistoryProps) => {
+const Root = (_props: HistoryProps) => {
   const { setToken } = useContext(AuthContext);
   const [isLogged, setIsLogged] = useState(false);
 
