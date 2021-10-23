@@ -6,7 +6,7 @@ const StyledTextInput = styled.input`
   width: 100%;
   height: 3rem;
   padding-left: 1em;
-  font-size: 1.5em;
+  font-size: calc(0.5em + 1vw);
   background-color: ${(props) => props.theme.colors.navy};
   border: 0;
   border-bottom: 0.15em solid ${(props) => props.theme.colors.stark};

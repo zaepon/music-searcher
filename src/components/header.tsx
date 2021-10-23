@@ -22,6 +22,7 @@ const StyledH4 = styled.h4`
 
 const StyledH1 = styled.h1`
   color: ${(props) => props.theme.colors.stark};
+  font-size: calc(0.5em + 1vw);
 `;
 const Header = (props: HeaderProps) => {
   if (props.type === "h2")
