@@ -45,6 +45,7 @@ const Artist = (props: ArtistProps) => {
   const albumsResponse = albumsData.data?.artistAlbums;
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "auto" });
     const debounceRef = debounce(handleScroll, 200);
     window.addEventListener("scroll", debounceRef, true);
     return () => {

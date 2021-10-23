@@ -141,10 +141,13 @@ const App = (props: AppProps) => {
   const logout = () => {
     logoutMutation();
     logoutUser();
+
+    window.scrollTo({ top: 0, behavior: "auto" });
   };
 
   const handleScroll = () =>
     window.scrollY > 200 && !scrolled ? setScrolled(true) : setScrolled(false);
+
   return (
     <>
       <Box className="App">
@@ -162,7 +165,7 @@ const App = (props: AppProps) => {
         <Flex
           width={"100%"}
           justifyContent={"center"}
-          mt={"15%"}
+          mt={"5em"}
           mb={"3%"}
           flexWrap={"wrap"}
         >
@@ -192,7 +195,7 @@ const App = (props: AppProps) => {
             })}
         </Flex>
         {isLogged && !loading && artistRecommendations?.length && (
-          <Box mt={"15em"}>
+          <Box mt={"2em"}>
             <Flex justifyContent="center">
               <Header color="red" title="You may like some of these" />
             </Flex>
