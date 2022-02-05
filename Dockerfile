@@ -4,8 +4,6 @@ WORKDIR /app
 
 COPY . .
 
-ENV NODE_OPTIONS=--openssl-legacy-provider
-
 RUN yarn install && yarn build
 
 FROM nginx:alpine
