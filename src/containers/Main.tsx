@@ -83,7 +83,7 @@ const App = (props: AppProps) => {
       getArtistData({ variables: { filter: { name: qparam } } });
     }
 
-    if (artistId !== undefined) {
+    if (artistId !== "undefined") {
       getSimilarArtists({ variables: { artistId: artistId } });
     }
 
