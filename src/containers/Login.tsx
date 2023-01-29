@@ -20,7 +20,6 @@ const Login = (props: LoginProps) => {
   const code = q.get("code");
   useEffect(() => {
     const getToken = async () => {
-      console.log(code);
       const tokenData = await getAccessToken({
         variables: { code: code as string },
       });
