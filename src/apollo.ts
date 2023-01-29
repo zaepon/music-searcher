@@ -19,7 +19,9 @@ const authMiddleware = new ApolloLink((operation, forward) => {
   const auth = getAccessToken();
   operation.setContext({
     headers: {
-      authorization: `${auth.includes("Bearer") ? auth : "Bearer " + auth}`,
+      authorization: `${
+        auth.includes("Bearer") ? auth : auth?.length ? "Bearer " + auth : ""
+      }`,
     },
   });
   return forward(operation);
