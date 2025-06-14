@@ -20,7 +20,6 @@ jobs:
           fingerprints:
             - "cb:85:5a:0d:8b:a1:34:9c:ce:7d:b8:ed:8d:6b:49:32"
 
-      - run: echo $DOCKERHUB_USER $DOCKERHUB_PASSWORD $CLIENT_ID_SECRET
 
       - run: yarn install
 
